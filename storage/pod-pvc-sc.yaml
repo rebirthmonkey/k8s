@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: storage-pvc-sc
+spec:
+  containers:
+  - name: busybox-pvc-sc
+    image: busybox          
+    command: ["sleep", "60000"]
+    volumeMounts:
+    - name: data-vol
+      mountPath: /usr/share/busybox 
+      readOnly: false
+  volumes:
+  - name: data-vol
+    persistentVolumeClaim:
+      claimName: storage-sc

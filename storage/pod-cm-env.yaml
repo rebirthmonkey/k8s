@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: storage-cm-env
+spec:
+  restartPolicy: Never
+  containers:
+    - name: debian-env
+      image: debian
+      command: [ "/bin/sh", "-c", "env && sleep 3000" ]
+      env:
+        - name: SPECIAL_LEVEL_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: storage
+              key: special.how
+        - name: SPECIAL_TYPE_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: storage
+              key: special.type
