@@ -47,3 +47,8 @@
 
 ### Storage Class
 - doesn't work
+
+
+## Doc
+- [K8S RBD](https://ieevee.com/tech/2018/05/16/k8s-rbd.html)
+- [K8S CephFS](https://ieevee.com/tech/2018/05/17/k8s-cephfs.html)
