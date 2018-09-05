@@ -18,12 +18,10 @@ Use an existing dir for the volume
 ### Persistent Volume (VP)
 Independent from pods, has the life-cycle as the whole k8s cluster.
 PV is not hosted on a node, it belongs to the k8s cluster. 
- 
 
 ### PersistentVolumeClaim (VPC)
 PVC is used to create a PV which will be later declared and used in a pod.
 - `kubectl apply -f pvc1.yaml`: create a PVC
-
 
 ### Storage Class
 - `kubectl create -f sc.yaml`: create a default storage class
@@ -59,19 +57,4 @@ Mount Config to pod as volume
 
 
 ## Ceph
-### Secret
-- `echo keyring | base64`: to secret.yaml-> key
-- `kubectl create -f secret-ceph-luminous-admin.yaml`
-
-### cephfs
-#### Pod with Volume
-- ???`kubectl create -f luminous/cephfs-pod-volume.yaml`: doesn't work
-
-#### PV/PVC
-- `kubectl create -f luminous/cephfs-pv.yaml`
-- `kubectl create -f luminous/cephfs-pvc.yaml`
-- `kubectl create -f luminous/cephfs-pod.yaml`
-- `kubectl exec -it cephfs -- cat /mnt/xxx/aaa`
-
-#### Storage Class
-- doesn't work
+- [Ceph](ceph/README.md)
