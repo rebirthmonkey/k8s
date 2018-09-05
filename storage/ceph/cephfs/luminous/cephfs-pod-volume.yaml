@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cephfs-volume
+spec:
+  containers:
+  - name: cephfs
+    image: busybox:latest
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+    - mountPath: "/mnt/xxx"
+      name: cephfs
+  volumes:
+  - name: cephfs
+    cephfs:
+      monitors:
+      - 10.125.224.26:6789
+      path: /xxx
+      user: "admin"
+      secretRef:
+        name: ceph-luminous-admin
+      readOnly: true

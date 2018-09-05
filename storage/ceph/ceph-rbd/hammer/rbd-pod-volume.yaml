@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rbd
+spec:
+  containers:
+    - name: rbd
+      image: busybox:latest
+      imagePullPolicy: IfNotPresent
+      command: ["sleep", "60000"]
+      volumeMounts:
+      - name: rbd
+        mountPath: /mnt/rbd
+  volumes:
+    - name: rbd
+      rbd:
+        monitors:
+        - '10.123.102.70:6789,10.123.102.71:6789,10.123.102.72:6789'
+        pool: k8s
+        image: xxx
+        fsType: ext4
+        readOnly: false
+        user: admin
+        secretRef:
+          name: ceph-hammer-admin

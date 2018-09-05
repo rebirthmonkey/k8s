@@ -57,3 +57,21 @@ Mount Config to pod as volume
 - `kubectl create -f secret.yaml`
 - `kubectl get secret`
 
+
+## Ceph
+### Secret
+- `echo keyring | base64`: to secret.yaml-> key
+- `kubectl create -f secret-ceph-luminous-admin.yaml`
+
+### cephfs
+#### Pod with Volume
+- ???`kubectl create -f luminous/cephfs-pod-volume.yaml`: doesn't work
+
+#### PV/PVC
+- `kubectl create -f luminous/cephfs-pv.yaml`
+- `kubectl create -f luminous/cephfs-pvc.yaml`
+- `kubectl create -f luminous/cephfs-pod.yaml`
+- `kubectl exec -it cephfs -- cat /mnt/xxx/aaa`
+
+#### Storage Class
+- doesn't work
