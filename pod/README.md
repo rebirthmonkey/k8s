@@ -6,23 +6,23 @@ Atomic unit in k8s, *it always runs on 1 node*.
 - networking: all the containers in 1 pod use a unique IP address, communicate with one another using `localhost`
 - scalability: increase or decrease the number of pods
 
-### Pause Container
-
 ### Storage
 pod-level storage which will be deleted when pod is destroyed.  
 - emptyDir
 - hostPath
-- secret
 - configMap
+- secret
 
 ### Network
-- hostPort: launch hostPort network mode, and set new hostPort *spec/ports*
+- hostPort: container level, expose 1 containerPort on the host
 
       ports: 
       - containerPort: 8080
-      - hostPort: 8081
+        hostPort: 8081
 
-- hostNetwork=true: map all pod's ports to the host
+- hostNetwork: pod level, expose all the containerPorts on the host
+
+      hostNetwork: true
 
 
 ### Health Check
@@ -49,7 +49,7 @@ It cannot be managed by the API server, so it cannot be managed by ReplicationCo
 - launched by HTTP 
 
 ## Usage
-### CMD
+CMD
 - `kubectl get pods`: list pods
   - `keubctl get pods --show-all`
 - `kubectl describe pods`: describe pods
@@ -128,24 +128,22 @@ It cannot be managed by the API server, so it cannot be managed by ReplicationCo
 - Program in the container should be run on the frontend
 
 
-## TP
-### TP1: 1 Pod with 1 Container
+## Example
+### 1 Pod with 1 Container
 - `kubectl create -f pod1.yaml`
 - `kubectl exec -it pod1 -- env`
 - `kubectl exec -it pod1 -- /bin/sh`
+- `kubectl describe pod pod1`: get IP address
+- `ping POD1_IP`: can ping pod1
 
-### TP2: 1 Pod with 2 Containers
+### 1 Pod with 2 Containers
 - `kubectl create -f pod2.yaml`
 - `kubectl exec -it pod2 -c ct-nginx -- /bin/bash`
   - `apt-get update`
   - `apt-get install curl`
-  - `curl localhost`: to get the hello message from the container
-- `kubectl describe pod pod2`: to get IP addresss
-- `minikube ssh`
-  - `curl pod2_IP`: to get the hello message from the node
+  - `curl localhost`: get the hello message from the container
+- `kubectl describe pod pod2`: get IP address
+- `curl POD2_IP`: get the hello message from the node
 - `kubectl exec -it pod2 -c ct-debian -- /bin/bash`
-  - `echo Chanage message from pod2-ct-debian > /data/index.html `
-- `minikube ssh`
-  - `curl pod2_IP`: to get the hello message from the node
-
-### TP3: 1 Pod with 2 Services
+  - `echo Chanage message from pod2-ct-busybox > /data/index.html `
+- `curl POD2_IP`: get the new message from the node

@@ -6,6 +6,7 @@ metadata:
     app: pod1
 spec:
   containers:
-  - name: ct1
-    image: busybox
+  - name: ct-busybox
+    image: busybox:latest
+    imagePullPolicy: IfNotPresent
     command: ['sh', '-c', 'echo pod1 is running! && sleep 3000']

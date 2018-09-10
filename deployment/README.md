@@ -1,24 +1,23 @@
 # ReplicaSet/ Deployment/ Job/ Cronjob/ StatefulSet
 ## ReplicaSet
-ReplicaSet ensures a fixed number of running pods through selector which is the next generation of ReplicaController.
+ReplicaSet ensures a fixed number of running pods through selector.
 *It is recommended to be replaced by Deployment.*
-- `kubectl create -t $REPLICASET_ID`: create replicaset
-- `kubectl get replicasets`: list replicasets
-- `kubectl delete replicasets $REPLICASET_ID`: delete replicaset
-[ReplicaSet YAML example](replicaset.yaml)
+- `kubectl create -t rs.yaml`: create replicaset
+- `kubectl get rs`: list replicasets
+- `kubectl delete rs RS_ID`: delete replicaset
 
 ### NodeSelector
 - `kubectl label nodes NODE_ID zone=xxx`
 - `vim rs.yaml`
 
-    spec/containers/
+    spec/containers
       nodeSelector:
         zone: north  
 
 
 ## Deployment
 Deployment instructs k8s how to create and update N pods through a ReplicaSet.
-The main difference between RS and Deployment is that Deployment may 2 RS for rolling upgrade. 
+The main difference between rs and dpl is that dpl may use 2 rs for rolling upgrade. 
 - scaling: change the number of pod replicas in a deployment.
 - docker image update
   - rolling update: create a new deploy to increase and decrease the old one
@@ -26,24 +25,22 @@ The main difference between RS and Deployment is that Deployment may 2 RS for ro
 
 - `kubectl get deployments`: list deployments
 - `kubectl run nginx --image=IMG --port=80 --replicas=3`: create a deployment through a CMD
-- `kubectl create -f DEP.yaml`: create a deployment through a YAML file
-- `kubectl edit deployment DEP_ID`: edit deployment
-
-### Scaling
-- `kubectl scale deployments DEP_ID --replicas=4`: scale up
+- `kubectl create -f dpl1.yaml`: create a deployment through a YAML file
+- `kubectl edit deployment DPL_ID`: edit and update deployment
+- `kubectl delete deployment DPL_ID`
+- `kubectl scale deployment DEP_ID --replicas=4`: scale up
 
 ### Upgrade/ Rollout
-- `kubectl rolling-update DPL_ID -f xxx-dpl.yaml`
-- `kubectl set image deployment DEP_ID IMG_ID=nginx:latest`: upgrade image
+- `kubectl rolling-update DPL_ID -f dpl2.yaml`
+- `kubectl set image deployment DPL_ID IMG_ID=nginx:latest`: upgrade image
 - `kubectl rollout status deployment DEP_ID`: set rollout status
 
-### TP
+### Example
 - `kubectl create -f deployment.yaml`: create a deployment with 2 replicas
 - `kubectl get deployment`
-- `kubectl describe DEP_ID`: to get IP address
-- `curl POD_IP`: check the nginx server
-- `kubectl scale deployment DEP_ID --replicas=3`: scale out
-- `kubectl set image deployment DEP_ID IMG_ID=nginx:latest`: update image
+- `kubectl get pod | grep dpl`
+- `kubectl describe DEP_POD_ID`: to get IP address
+- `curl DEP_POD_IP`: check the Nginx server
 
 
 ## DaemonSet

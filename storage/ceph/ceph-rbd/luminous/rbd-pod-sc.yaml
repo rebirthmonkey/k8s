@@ -4,15 +4,15 @@ metadata:
   name: rbd-sc
 spec:
   containers:
-  - name: rbd
+  - name: ct-rbd
     image: busybox:latest
     imagePullPolicy: IfNotPresent
     command: ["sleep", "60000"]
     volumeMounts:
-    - name: rbd-vol
-      mountPath: /mnt/rbd-sc/
+    - name: vol-rbd
+      mountPath: /mnt/rbd/
       readOnly: false
   volumes:
-  - name: rbd-vol
+  - name: vol-rbd
     persistentVolumeClaim:
       claimName: rbd-sc

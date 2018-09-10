@@ -1,11 +1,8 @@
 # Kubernetes/ k8s
-k8s coordinates a highly available cluster of servers/nodes that are connected to work as a single unit.
-
-
 ## Installation & Configuration
 - [k8s Installation & Configuration](installation/README.md)
 - `minikube start --memory 3072`: start minikube
-- `minikube dashbor`: check
+- `minikube dashboard`: check
 
 
 ## Basic Concepts
@@ -13,7 +10,7 @@ k8s coordinates a highly available cluster of servers/nodes that are connected t
 
 
 ## Architecture
-- [k8s Architecture and Components](Architecture.md)
+- [k8s Architecture and Key Components](Architecture.md)
 
 
 ## Code

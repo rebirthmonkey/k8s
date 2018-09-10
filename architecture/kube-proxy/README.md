@@ -1,0 +1,6 @@
+# kube-proxy
+
+- 通过监听kube-apiserver获得service、endpoint变化
+- 为每个service在每个node上建立一个SocketServer、在本node上监听一个临时端口：确保本host上的任何pod能访问该Service
+- service的本地SocketServer会通过内部LB调用某个node的SocketServer
+- LB保存了Service到Endpoint列表（SocketServer的临时端口）：确保了Service的clusterIP的request会被寄到任何一个node的pod上

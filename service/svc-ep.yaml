@@ -1,0 +1,9 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: external-nginx
+spec:
+  ports:
+  - protocol: TCP
+    targetPort: 80
+    port: 80

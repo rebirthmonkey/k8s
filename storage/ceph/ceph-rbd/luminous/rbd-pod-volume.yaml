@@ -4,15 +4,15 @@ metadata:
   name: rbd-volume
 spec:
   containers:
-    - name: rbd
+    - name: ct-rbd
       image: busybox:latest
       imagePullPolicy: IfNotPresent
       command: ["sleep", "60000"]
       volumeMounts:
-      - name: rbd
+      - name: vol-rbd
         mountPath: /mnt/rbd
   volumes:
-    - name: rbd
+    - name: vol-rbd
       rbd:
         monitors:
         - '10.125.224.26:6789'

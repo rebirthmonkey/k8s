@@ -1,0 +1,4 @@
+# kubelet
+
+处理master下发的本node任务，管理本节点pod及其中的container。
+每个kubelet会在API Server上注册node自身信息，定期向master汇报资源使用情况，并通过cAdvisor监控container和节点资源。

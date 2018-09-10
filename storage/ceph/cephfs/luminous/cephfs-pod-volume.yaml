@@ -4,19 +4,19 @@ metadata:
   name: cephfs-volume
 spec:
   containers:
-  - name: cephfs
+  - name: ct-cephfs
     image: busybox:latest
     imagePullPolicy: IfNotPresent
+    command: ["sleep", "60000"]
     volumeMounts:
-    - mountPath: "/mnt/xxx"
-      name: cephfs
+    - mountPath: "/mnt/cephfs"
+      name: vol-cephfs
   volumes:
-  - name: cephfs
+  - name: vol-cephfs
     cephfs:
       monitors:
       - 10.125.224.26:6789
-      path: /xxx
-      user: "admin"
+      user: admin
       secretRef:
         name: ceph-luminous-admin
       readOnly: true

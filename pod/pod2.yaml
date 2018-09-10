@@ -4,20 +4,21 @@ metadata:
   name: pod2
 spec:
   restartPolicy: Never
-  volumes:
-  - name: data
-    emptyDir: {}
-
   containers:
   - name: ct-nginx
-    image: nginx
+    image: nginx:latest
+    imagePullPolicy: IfNotPresent
     volumeMounts:
     - name: data
       mountPath: /usr/share/nginx/html
 
-  - name: ct-debian
-    image: debian
+  - name: ct-busybox
+    image: busybox:latest
+    imagePullPolicy: IfNotPresent
     volumeMounts:
     - name: data
       mountPath: /data
     command: ['/bin/sh', '-c', 'echo Hello from the debian container > /data/index.html && sleep 3000']
+  volumes:
+  - name: data
+    emptyDir: {}

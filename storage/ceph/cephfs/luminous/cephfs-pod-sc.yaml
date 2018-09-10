@@ -1,0 +1,18 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: cephfs-sc
+spec:
+  containers:
+  - name: ct-cephfs
+    image: busybox:latest
+    imagePullPolicy: IfNotPresent
+    command: ["sleep", "60000"]
+    volumeMounts:
+      - name: vol-cephfs
+        mountPath: "/mnt/cephfs"
+  restartPolicy: "Never"
+  volumes:
+    - name: vol-cephfs
+      persistentVolumeClaim:
+        claimName: cephfs-sc

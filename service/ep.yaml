@@ -1,0 +1,9 @@
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: external-nginx  # should be the same as the service name
+  subsets:
+  - addresses:
+    - ip: 10.12.143.168
+    ports:
+    - port: 80
