@@ -1,4 +1,9 @@
 # Ingress Controller
+-  Ingress Controller将基于Ingress规则将client的request直接转发到service对应的后端endpoint（即pod）上，这样会跳过kube-proxy的转发功能。
+Ingres Controller以DaemonSet的形式创建，在每个node上启动以Pod hostPort的方式一个Nginx服务。
+- Ingress策略: Ingress策略定义的path需要与后端真实Service的path一致，否则将会转发到一个不存在的path上。
+
+
 ## Nginx Ingress Controller
 ### Installation
 - k8s Standard
@@ -20,14 +25,12 @@
   - `helm install -n svc0 ./`
   - `kubect get ingress -o wide`: check if the backend endpoints are bound
   - `vim /etc/hosts`: svc0.wukong.io 127.0.0.1
-  - ???`curl --resolve svc0.wukong.io:80:127.0.0.1 http://svc0.wukong.io:32700`: curl doesn't work correctly
-  - ???`curl -H 'Host:svc0.wukong.io' http://svc0.wukong.io:32700`: curl doesn't work correctly
+  - ???`curl -H 'Host:svc0.wukong.io' 127.0.0.1:`: curl doesn't work correctly
 - Troubleshooting
   - `kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-qf6gw -- /bin/bash`
   - `cat /etc/nginx/nginx.conf`
   - `kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-qf6gw -- cat /etc/nginx/nginx.conf`
   - `kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-qf6gw -- tail /var/log/nginx/error.log`
-
 
 ### Examples 
 - [4 Scenarios](figures/kubernetes-ingress-controller-and-ingresses.png)

@@ -14,16 +14,15 @@ pod-level storage which will be deleted when pod is destroyed.
 - secret
 
 ### Network
-- hostPort: container level, expose 1 containerPort on the host
+- hostPort: expose 1 containerPort on the host
 
       ports: 
       - containerPort: 8080
         hostPort: 8081
 
-- hostNetwork: pod level, expose all the containerPorts on the host
+- hostNetwork: expose all the containerPorts on the host
 
       hostNetwork: true
-
 
 ### Health Check
 - livenessProbe:
