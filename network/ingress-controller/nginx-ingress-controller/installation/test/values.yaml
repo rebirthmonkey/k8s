@@ -20,7 +20,7 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   path: /
   hosts:
-    - svc0.wukong.io
+    - svc0.xxx.com
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
