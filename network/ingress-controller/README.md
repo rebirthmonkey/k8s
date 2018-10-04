@@ -13,18 +13,17 @@ Ingress策略定义的path需要与后端真实Service的path一致，否则将�
   - `kubectl apply -f controller-manifests/ic1-mandatory.yaml`
   - `kubectl apply -f controller-manifests/ic1-svc-np.yaml`
 - Helm
-  - `cd installation/chart`
-  - `vim values.yaml`: 
+  - `vim installation/chart/values.yaml`: 
     - Controller.ingressClass: nginx
-  - `helm install -n nginx-ingress-controller --namespace kube-system ./` 
+  - `helm install -n nginx-ingress-controller --namespace kube-system ./installation/chart` 
 - Check Installation
-  - `cd ../test`
-  - `vim values.yaml`
+  - `vim ./installation/test/values.yaml`
     - ingress.annotations.kubernetes.io/ingress.class: nginx
     - ingress.hosts: svc0.xxx.com
-  - `helm install -n svc0 ./`
+  - `helm install -n test ./installation/test`
   - `kubect get ingress -o wide`: check if the backend endpoints are bound
-  - `vim /etc/hosts`: svc0.xxx.com 127.0.0.1
+  - `vim /etc/hosts`
+    - svc0.xxx.com 127.0.0.1
   - `curl -H 'Host:svc0.xxx.com' 127.0.0.1:32700`: check the ingress
 - Troubleshooting
   - `kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-qf6gw -- /bin/bash`
@@ -56,19 +55,18 @@ Ingress策略定义的path需要与后端真实Service的path一致，否则将�
 - `telnet svc6.tonybai.com 32700`
 
 #### Scenario 5: 1 Ingress Controller, 1 HTTPS Ingress, 1 HTTP Service
-- `openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ic3.key -out ic3.crt -subj "/CN=*.tonybai.com/O=tonybai.com"`
-- `kubectl create secret tls ingress-controller-demo-tls-secret --key  xxx.key --cert xxx.crt`
+- `kubectl create secret tls ingress-controller-demo-tls-secret --key server.key --cert server.crt`
 - `helm install --name svc7 ./examples/charts/svc7`
 - `curl -k -H 'Host:svc7.xxx.com' https://127.0.0.1:32701`
 
-#### Scenario 6: 1 Ingress Controller, 1 HTTPS Ingress, 1 HTTPS Service
+#### Scenario 6: 1 Ingress Controller, 1 HTTPS Ingress, 1 HTTPS Service (ssl-termination)
 - `helm install --name svc8 ./examples/charts/svc8`
 - `curl -k -H 'Host:svc8.xxx.com' https://127.0.0.1:32701`
 
 #### Scenario 7: 1 Ingress Controller, 1 HTTPS Ingress, 1 HTTPS Service (ssl-passthrough)
 ssl-passthrough这个无法通过
-- `helm install --name ic3-svc9 ./examples/charts/svc9`
-- `curl -k --key ./client.key --cert ./client.crt -H 'Host:svc9.tonybai.com' https://127.0.0.1:30092`
+- `helm install --name svc9 ./examples/charts/svc9`
+- `curl -k --key ./client.key --cert ./client.crt -H 'Host:svc9.xxx.com' https://127.0.0.1:32701`
 
 
 ## Doc
