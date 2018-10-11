@@ -10,11 +10,7 @@
 
 
 ## Architecture
-- [k8s Architecture and Key Components](Architecture.md)
-
-
-## Code
-- [k8s Code](Code.md)
+- [k8s Architecture and Key Components](Components.md)
 
 
 ## Tools

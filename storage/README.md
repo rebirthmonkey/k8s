@@ -16,10 +16,12 @@ Use an existing dir for the volume
 
 ## Persistent Volume
 ### Persistent Volume (VP)
+对底层共享存储的抽象。
 Independent from pods, has the life-cycle as the whole k8s cluster.
 PV is not hosted on a node, it belongs to the k8s cluster. 
 
 ### PersistentVolumeClaim (VPC)
+用户对于存储资源的申请。
 PVC is used to create a PV which will be later declared and used in a pod.
 - `kubectl apply -f pvc1.yaml`: create a PVC
 
@@ -52,6 +54,8 @@ Mount Config to pod as volume
 
 
 ## Secret
+Secret用BASE64编码来保持敏感信息，只有当敏感信息被挂在到pod/CT中之后，才会解码敏感信息。
+
 - `kubectl create -f secret.yaml`
 - `kubectl get secret`
 
