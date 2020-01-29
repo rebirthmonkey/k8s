@@ -9,28 +9,28 @@
 
 
 ## kube-apiserver
-- [kube-apiserver](components/kube-apiserver/README.md)
+- [kube-apiserver](kube-apiserver/README.md)
 
 
 ## kube-controller-manager
-- [kube-controller-manager](components/kube-controller-mgr/README.md)
+- [kube-controller-manager](kube-controller-mgr/README.md)
 
 
 ## kube-scheduler
-- [kube-scheduler](components/kube-scheduler/README.md)
+- [kube-scheduler](kube-scheduler/README.md)
 
 
 ## kubelet
-- [kubelet](components/kubelet/README.md)
+- [kubelet](kubelet/README.md)
 
 
 ## kube-proxy
-- [kube-proxy](components/kube-proxy/README.md)
+- [kube-proxy](kube-proxy/README.md)
 
 
 ## kube-dns
-- [kube-dnd](topics/kube-dns/README.md)
+- [kube-dns](kube-dns/README.md)
 
 
 ## Security
-- [Security](components/aaa/README.md)
+- [Security](component/aaa/README.md)

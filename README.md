@@ -1,20 +1,26 @@
 # Kubernetes/ k8s
-## Installation & Configuration
-- [k8s Installation & Configuration](installation/README.md)
-- `minikube start --memory 3072`: start minikube
-- `minikube dashboard`: check
+
+## Operation
+- [Operation](operations/README.md)
 
 
-## Basic Concepts
-- [k8s Basic Concepts](Basic.md)
+## Container
+- [Container](container/README.md)
 
 
-## Architecture
-- [k8s Architecture and Key Components](Components.md)
+## k8s Concepts
+- [k8s Concepts](concepts/README.md)
 
+
+## Architecture & Components
+- [k8s Architecture & Components](components/README.md)
+
+
+## Extensions & Add-ons
+- [k8s Extensions and Add-ons](extensions/README.md)
 
 ## Tools
-- [Helm](helm/README.md)
+- [Helm](tools/helm/README.md)
 
 
 ## TP

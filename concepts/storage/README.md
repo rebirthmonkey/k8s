@@ -1,4 +1,7 @@
 # Storage
+## 基础
+- [存储基础](basics.md)
+
 ## Volume (Pod-level)
 Attached to a pod and has the same life-cycle as the pod, deleted when the pod is destroyed. 
 Volume is always hosted by each local node. 
