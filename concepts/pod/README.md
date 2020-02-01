@@ -1,4 +1,34 @@
 # Pod
+
+
+
+
+
+## Resources
+
+k8s中资源的设置在pod中，由于 Pod 可以由多个 Container 组成，所以 CPU 和内存资源的限额，是要配置在每个 Container 的定义上的。这样，Pod 整体的资源配置，就由这些 Container 的配置值累加得到。
+
+### CPU
+
+Kubernetes 里为 CPU 设置的单位是“CPU 的个数”，比如500m，指的就是 500 millicpu，也就是 0.5 个 CPU 的意思。这样，这个 Pod 就会被分配到 1 个 CPU 一半的计算能力。
+
+#### cpuset
+
+可以通过设置 cpuset 把容器绑定到某个 CPU 的核上，而不是像 cpushare 那样共享 CPU 的计算能力。这种情况下，由于操作系统在 CPU 之间进行上下文切换的次数大大减少，容器里应用的性能会得到大幅提升。cpuset 方式是生产环境里部署在线应用类型的 Pod 时非常常用的一种方式。设置cpuset只需要将 Pod 的 CPU 资源的 requests 和 limits 设置为同一个相等的整数值即可。
+
+### Memory
+
+内存资源来说，它的单位自然就是 bytes。Kubernetes 支持你使用 Ei、Pi、Ti、Gi、Mi、Ki（或者 E、P、T、G、M、K），其中1Mi=1024\*1024；1M=1000\*1000。
+
+### requests vs. limits
+
+- requests是在调度的时候使用的资源值，也就是kube-scheduler 只会按照 requests 的值进行计算。
+- limits是真正设置 Cgroups 限制的值。
+
+k8s认为容器化作业在提交时所设置的资源边界，并不一定是调度系统所必须严格遵守的，因为大多数作业使用到的资源其实远小于它所请求的资源限额。基于这种假设，Borg 在作业被提交后，会主动减小它的资源限额配置，以便容纳更多的作业、提升资源利用率。而当作业资源使用量增加到一定阈值时，Borg 会还原作业原始的资源限额，防止出现异常情况。而 Kubernetes 的 requests+limits 的做法，其实就是上述思路的一个简化版。用户在提交 Pod 时，可以声明一个相对较小的 requests 值供调度器使用，而 Kubernetes 真正设置给容器 Cgroups 的，则是相对较大的 limits 值，所以requests永远小于limits。
+
+
+
 ## Introduction
 Atomic unit in k8s, *it always runs on 1 node*.
 - computing: 1 or N containers, but the number of containers within 1 pod is fixed
@@ -96,7 +126,7 @@ CMD
       valueFrom: 
         fieldRef: 
           fieldRef: metadata.name
-          
+  
   - metadata: fixed info about a pod 
     - metadata.name
     - metadata.namespace 
