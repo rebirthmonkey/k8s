@@ -1,18 +1,13 @@
 # Ingress Controller
 Ingress是k8s内置的一个全局负载均衡器，通过访问的URL把请求转发给不同的后端Service，所以ingress其实是为了代理不同后端Service而设置的负载均衡服务。Ingress只能工作在L7，而Service只能工作在L4，Ingress Controller基于Ingress规则将client的request直接转发到service对应的后端endpoint（即pod）上，这样会跳过kube-proxy的转发功能。
 
-Ingres Controller以NodePort的形式创建，在每个node上启动以port的方式一个Nginx服务。
+Ingres Controller以DaemonSet的形式创建，在每个node上启动以Pod hostPort的方式一个Nginx服务。
 
-
-
-## Ingress Rule
-
-一个Ingress对象可以有多个host，每个host里面可以有多个path对应多个service。Ingress策略定义的path需要与后端真实Service的path一致，否则将会转发到一个不存在的path上。
+### Ingress策略
+一个Ingress对象可以有多个host，每个host里面可以有多个path对应多个service。Ingress策略定义的path需要与后端真实Service的path一致，否则将会转发到一个不存在的path上。Ingress策略定义的path需要与后端真实Service的path一致，否则将会转发到一个不存在的path上。
 
 - host：
 - path
-
-
 
 
 ## Nginx Ingress Controller

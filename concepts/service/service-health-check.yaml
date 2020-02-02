@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-health
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: service-health
+  template:
+    metadata:
+      labels:
+        app: service-health
+    spec:
+      containers:
+        - name: service-health
+          image: python:2.7
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/bash","-c","echo \$(hostname) > index.html && sleep 60 && python -m SimpleHTTPServer 8080"]
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 35
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20

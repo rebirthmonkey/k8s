@@ -1,0 +1,17 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: storage
+  annotations:
+    storageclass.beta.kubernetes.io/is-default-class: "true"
+provisioner: kubernetes.io/rbd
+parameters:
+  monitors: 10.123.102.70:6789,10.123.102.71:6789,10.123.102.72:6789
+  adminId: admin
+  adminSecretName: storage
+  adminSecretNamespace: default
+  pool: k8s
+  userId: admin
+  userSecretName: storage
+  fsType: xfs
+  imageFormat: "1"

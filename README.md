@@ -1,4 +1,4 @@
-# Kubernetes/ k8s
+# Kubernetes/k8s
 
 ## Operation
 - [Operation](operations/README.md)
@@ -19,10 +19,11 @@
 ## Extensions & Add-ons
 - [k8s Extensions and Add-ons](extensions/README.md)
 
+
+## Exercises
+- [Exercises](exercises/README.md)
+
+
 ## Tools
 - [Helm](tools/helm/README.md)
-
-
-## TP
-- [TP](tp/README.md)
 

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: storage
+data:
+  special.how: very
+  special.type: charm

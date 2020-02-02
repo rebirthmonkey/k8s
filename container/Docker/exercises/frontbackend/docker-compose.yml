@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  backend:
+    build: ./backend
+    volumes:
+     - ./backend:/data
+    networks:
+     - frontbackend
+
+  frontend:
+    build: ./frontend
+    networks:
+     - frontbackend
+    ports:
+     - "6666:8888"
+
+networks:
+  frontbackend:

@@ -1,0 +1,24 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: wordpress-frontend
+  labels:
+    app: ___________
+spec:
+  template:
+    metadata:
+      labels:
+        app: ___________
+        service: ___________
+    spec:
+      containers:
+        - name: ___________
+          image: wordpress:4.8
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: ___________
+            - name: WORDPRESS_DB_PASSWORD
+              value: ___________
+          ports:
+            - containerPort: 80
+              name: ___________

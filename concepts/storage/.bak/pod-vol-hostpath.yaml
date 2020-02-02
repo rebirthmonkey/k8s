@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: storage-vol-hostpath
+spec:
+  restartPolicy: Never
+  volumes:
+  - name: data-vol
+    hostPath:
+      path: /tmp
+      type: Directory
+
+  containers:
+  - name: debian-vol-hostpath
+    image: debian
+    volumeMounts:
+    - name: data-vol
+      mountPath: /data
+    command: ['/bin/sh', '-c', 'sleep 3000']

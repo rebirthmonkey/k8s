@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-configmap-env-pod
+spec:
+  containers:
+    - name: test-container
+      image: radial/busyboxplus
+      imagePullPolicy: IfNotPresent
+      command: [ "/bin/sh", "-c", "sleep 1000000" ]
+      envFrom:
+        - configMapRef:
+            name: storage

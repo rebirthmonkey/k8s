@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  redis:
+    image: redis:alpine
+
+  web:
+    depends_on:
+       - redis
+    build: ./docker
+    ports:
+     - 5000:5000
+

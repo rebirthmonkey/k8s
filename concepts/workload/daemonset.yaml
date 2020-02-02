@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx-daemonset
+  labels:
+    k8s-app: nginx-test
+spec:
+  selector:
+    matchLabels:
+      name: nginx-test
+  template:
+    metadata:
+      labels:
+        name: nginx-test
+    spec:
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+      containers:
+        - name: nginx-test
+          image: nginx
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: 200Mi
+            requests:
+              memory: 200Mi
