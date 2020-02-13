@@ -8,8 +8,8 @@
 - [Container](container/README.md)
 
 
-## k8s Concepts
-- [k8s Concepts](concepts/README.md)
+## k8s Objects
+- [k8s Concepts](objects/README.md)
 
 
 ## Architecture & Components

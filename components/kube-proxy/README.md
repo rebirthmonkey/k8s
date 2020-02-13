@@ -16,3 +16,32 @@ kube-proxy会为每个service在本地创建4条规则：
 - Host中通过clusterIP+port访问service
 - CT中通过nodeIP+nodePort访问service
 - Host中通过nodeIP+nodePort访问service
+
+## Service实现机制
+
+### Userspace
+
+发往clusterIP的流量会先转发给kube-proxy，然后由kube-proxy转发给不同的pod。
+
+![image-20200205131142504](figures/image-20200205131142504.png)
+
+### IPtables
+
+kube-proxy直接在iptables里面创建转发规则，把发给clusterIP的流量转发给不同的pod。
+
+![image-20200205131358750](figures/image-20200205131358750.png)
+
+iptables中的转发规则如下：
+
+![image-20200205131500023](figures/image-20200205131500023.png)
+
+### IPVS
+
+kube-proxy创建IPVS，由IPVS把转发给clusterIP的流量转发给相应的pod。
+
+![image-20200205131740107](figures/image-20200205131740107.png)
+
+
+
+
+

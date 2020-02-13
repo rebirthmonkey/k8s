@@ -9,6 +9,21 @@ Atomic unit, *it always runs on 1 node*. Only containers with the same lifecycle
 
 ## Properities
 
+### 生命周期
+
+Pod生命周期的变化主要体现在pod.status.phase属性：
+
+- Pending：YAML文件已经提交给k8s，API对象已被创建并保存在Etcd中，但这个Pod里有些容器因为某种原因而不能被顺利创建，如：调度不成功。
+- Running：Pod的容器已在某个节点成功创建，并且至少有一个正在运行中。
+- Succeeded：Pod里的所有容器都正常运行完毕，并已经退出了
+- Failed：Pod里至少有一个容器以不正常的状态（非 0 的返回码）退出
+- Unknown：Pod的状态不能持续地被kubelet汇报给 kube-apiserver，这很有可能是主从节点（Master 和 Kubelet）间的通信出现了问题。
+- Conditions：对先前状态的细分状态，对造成当前Status的具体原因是什么的解释
+  - PodScheduled
+  - Ready：通过readiness的check
+  - Initialized
+  - Unschedulable：调度出现了问题
+
 ### RestartPolicy
 
 - Always：只要退出就重启
@@ -38,7 +53,7 @@ pod-level storage which will be deleted when pod is destroyed.
 - secret
 
 ### Network
-- Pod内的不通container间通过pause容器实现共享
+- Pod内的不同container间通过pause容器实现网络共享
 
 - hostPort: expose 1 containerPort on the host
 
@@ -51,27 +66,31 @@ pod-level storage which will be deleted when pod is destroyed.
       hostNetwork: true
 
 ### Health Check
-- livenessProbe：会一直检测，当应用不健康时（尤其是运行一段时间后坏了），则需要重启该pod。
+
+- livenessProbe：会一直检测，如果失败，pod则会重启失败的容器（restartPolicy=always）。
   - exec:
   - tcpSocket:
   - httpGet:
   - initialDelaySeconds (s):
   - timeoutSeconds (s): 
-- readinessProbe：优先于liveness，它会一直检测应用是否处于服务正常状态，当应用不健康时，不把pod标注为ready。
+- readinessProbe：优先于liveness，它会一直检测应用是否处于服务正常状态，当应用不健康时，不把pod标注为ready。readinessProbe检查结果的成功与否，决定的这个Pod是不是能被通过Service的方式访问到，而并不影响 Pod 的生命周期。
 - Check Modes
   - CMD：
   - HTTP：
   - TCP：
 
 ### initContainer
-只有当所有的initContainer都运行完之后，才会初始化containers
+
+在Pod中，只有当所有Init Container定义的容器都运行完之后，才会初始化pod中的containers。Init Container容器会按顺序逐一启动，而直到它们都启动并且退出了，用户容器才会启动。
+
 - `vim dpl.yaml`
 
-    spec:
-      initContainers:
-      containers:
+  spec:
+    initContainers:
+    containers:
 
 ### Static Pod
+
 静态pod不经apiserver，都是本地的pod通过kubelet直接启动。
 Pod only exists on a node, managed by the local kubelet but node k8s master.  
 It cannot be managed by the API server, so it cannot be managed by ReplicationController, Deployment or DaemonSet.

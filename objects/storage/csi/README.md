@@ -2,9 +2,9 @@
 
 CSI的设计思想把插件的职责从“两阶段处理”，扩展成了Provision、Attach和Mount三个阶段：
 
-- Provision用于于“创建磁盘”
-- Attach用于“挂载磁盘到虚拟机”
-- Mount用于“将该磁盘格式化后，挂载在容器Volume对应的宿主机目录上”
+- Provision用于于“创建volume”
+- Attach用于“attach volume到node上”
+- Mount用于“将该volume格式化后，mount到容器volume对应的宿主机目录上”
 
 
 
@@ -16,27 +16,32 @@ CSI的设计思想把插件的职责从“两阶段处理”，扩展成了Provi
 
 ### External Components
 
-- Driver Registrar 组件，负责将插件注册到 kubelet 里面（
-- External Provisioner 组件，负责的正是 Provision 阶段
-- External Attacher 组件，负责的正是“Attach 阶段”。
-- 而 Volume 的“Mount 阶段”，并不属于 External Components 的职责。
+External components可以认为是CSI在k8s中的controller，它由以下3个组件组成：
 
-### CSI插件
+- Driver Registrar：将某个CSI插件（custom components）注册到kubelet里面
+- External Provisioner：负责的是Provision阶段，用于创建volune
+- External Attacher：负责的是Attach 阶段，用于将远程的volume attach到pod所在的节点。
+- 而volume的Mount 阶段，并不属于External Components的职责，由CSI插件（custom components）中的CSI node实现。
 
-- CSI Identity 服务，负责对外暴露这个插件本身的信息。
-- CSI Controller 服务，定义的则是对 CSI Volume的管理接口，比如：创建和删除 CSI Volume、对 CSI Volume 进行 Attach/Dettach（在 CSI 里，这个操作被叫作 Publish/Unpublish），以及对 CSI Volume 进行 Snapshot 等。 CSI Controller负责Volume管理流程中的“Provision 阶段”和“Attach 阶段”：
-  - “Provision 阶段”对应的接口，是 CreateVolume 和 DeleteVolume，如块调用远程存储服务的 API创建出一个存储卷
-  - “Attach 阶段”对应的接口是 ControllerPublishVolume 和 ControllerUnpublishVolume，如调用远程快存储服务的API，将先前创建的存储卷挂载到指定的节点上
-- CSI Node服务里包含了需要在宿主机上执行的操作，对应Volume管理流程里的“Mount 阶段”。kubelet 的 VolumeManagerReconciler 控制循环会直接调用 CSI Node 服务来完成 Volume 的“Mount 阶段”。
+### CSI插件（Custom Components）
+
+- CSI Identity：负责对外暴露这个插件本身的信息。
+- CSI Controller负责Volume管理流程中的“Provision 阶段”和“Attach 阶段”：
+  - “Provision 阶段”：对CSI Volume的管理接口，比如：创建和删除 CSI Volume。对应的接口是CreateVolume和DeleteVolume，如块调用远程存储服务的API创建出一个存储卷。
+  - “Attach 阶段”：对CSI Volume进行Attach/Dettach（在 CSI 里，这个操作被叫作 Publish/Unpublish）。对应的接口是ControllerPublishVolume和ControllerUnpublishVolume，如调用远程快存储服务的API，将先前创建的存储卷挂载到指定的节点上。
+  - 对CSI Volume进行Snapshot等。 
+- CSI Node包含了需要在宿主机上执行的操作，对应volume管理流程里的“Mount 阶段”。kubelet 的 VolumeManagerReconciler 控制循环会直接调用CSI Node服务来完成Volume 的“Mount 阶段”。
   - NodeStageVolume 接口的作用就是格式化 Volume 在宿主机上对应的存储设备，然后挂载到一个临时目录（Staging 目录）上。
   - SetUp 操作则会调用 CSI Node 服务的 NodePublishVolume 接口，将 Staging 目录绑定挂载到 Volume 对应的宿主机目录上。
 
 ## 部署
 
-- 通过 DaemonSet 在每个节点上都启动一个 CSI 插件，来为 kubelet 提供 CSI Node 服务。
+- 通过 DaemonSet 在每个节点上都启动一个CSI插件，来为 kubelet 提供 CSI Node 服务。
   - 在这个DaemonSet面，除了 CSI 插件还以 sidecar 的方式运行着 driver-registrar 这个外部组件。它的作用，是向 kubelet 注册这个 CSI 插件。这个注册过程使用的插件信息，则通过访问同一个 Pod 里的 CSI 插件容器的 Identity 服务获取到。
   - 在定义 DaemonSet Pod 的时候，我们需要把宿主机的 /var/lib/kubelet 以 Volume 的方式挂载进 CSI 插件容器的同名目录下，方便CSI Node 服务在“Mount 阶段”执行的挂载操作
 - 通过 StatefulSet 在任意一个节点上再启动一个 CSI 插件，为 External Components 提供 CSI Controller 服务。作为 CSI Controller 服务的调用者，External Provisioner 和 External Attacher 这两个外部组件，就需要以 sidecar 的方式和这次部署的 CSI 插件定义在同一个 Pod 里。
+
+![image-20200207163826336](figures/image-20200207163826336.png)
 
 ## 具体流程
 
