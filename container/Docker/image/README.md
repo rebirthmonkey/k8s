@@ -18,18 +18,11 @@
 
 #### 镜像完整路径
 
-**<registry>/<repository>/<image>:<tag>**
+``<registry>/<repository>/<image>:<tag>``
 
 #### 下载流程
 - 下载Manifest：`GET /v2/<name>manifests/<reference>`，从而获得分层镜像列表
-
-![image-20200202105710128](figures/image-20200202105710128.png)
-
-
 - 分层下载镜像：`GET /v2/<name>/blobs/<blobsum>`
-
-![image-20200202105737166](figures/image-20200202105737166.png)
-
 
 
 ## Manipulation
@@ -62,7 +55,8 @@
 - `docker save REPO:TAG > /tmp/registry.tar`: export the registry image
 - `docker load < registry.tar`: import the registry image
 
-## Exercises
+
+## Lab
 
 ### Download a MySQL image
 ```bash 

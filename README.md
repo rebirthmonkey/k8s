@@ -1,29 +1,11 @@
-# Kubernetes/k8s
+# Docker & K8s Tutorial
 
-## Operation
-- [Operation](operations/README.md)
+## Docker Tutorial
 
+- [Docker Tutorial](container/Docker/README.md)
 
-## Container
-- [Container](container/README.md)
+## K8s Tutorial
 
-
-## k8s Objects
-- [k8s Concepts](objects/README.md)
-
-
-## Architecture & Components
-- [k8s Architecture & Components](components/README.md)
-
-
-## Extensions & Add-ons
-- [k8s Extensions and Add-ons](extensions/README.md)
-
-
-## Exercises
-- [Exercises](exercises/README.md)
-
-
-## Tools
-- [Helm](tools/helm/README.md)
-
+- [k8s installation](operations/installation/README.md)
+- [k8s objects](objects/README.md)
+- [Lab](lab/README.md)

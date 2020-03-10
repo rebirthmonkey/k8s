@@ -183,7 +183,7 @@ It cannot be managed by the API server, so it cannot be managed by ReplicationCo
                 fieldPath: metadata.labels      # all the labels of in the metadata
 
 
-## Exercises
+## Lab
 ### 1 Pod with 1 Container
 - `kubectl create -f pod1.yaml`
 - `kubectl exec -it pod1 -- env`

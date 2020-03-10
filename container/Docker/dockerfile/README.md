@@ -2,7 +2,7 @@
 Dockerfile specifies all the configurations to build an image.
 
 
-## Instruction
+## Introduction
 - `FROM`: base image，设置基础镜像为Debian
 - `LABEL`: replace the previous MAINTAINER, metadata for the image
 - `ENV`: define environment variables to be used by *RUN*, *ENTRYPOINT*, *CMD*

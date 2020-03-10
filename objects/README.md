@@ -1,17 +1,6 @@
 # Basic
 ## Introduction
 
-### API Groups
-
-k8s has several API groups and resource objects belong to one of these API groups:
-- core (also called legacy) group: for standard resource objects like pod 
-  - REST path `/api/v1` is not specified as part of the apiVersion field, for example `apiVersion: v1`
-  - pod, service...
-- named groups: for new resource objects
-  - REST path `/apis/$GROUP_NAME/$VERSION` and uses `apiVersion: $GROUP_NAME/$VERSION`  like `apiVersion: batch/v1`
-  - `apps` API group: StatefulSet
-  - `extension` API group: 
-  
 ### YAML语法
 
 k8s API对象的定义大多可以分为Metadata和Spec两个部分。前者存放对象的元数据，对所有API对象来说，这部分的字段和格式基本上是一致的。后者存放属于这个对象独有的定义，用来描述它所要表达的功能。

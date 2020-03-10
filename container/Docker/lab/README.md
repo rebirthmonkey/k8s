@@ -6,7 +6,8 @@
 - `redis:alpine`
 - `python:3.4-alpine`
 
-## Exercises
+
+## Lab
 - [wordpress](wordpress/README.md)
 - [python-server](python-server/README.md)
 - [frontend & backend](frontbackend/README.md)

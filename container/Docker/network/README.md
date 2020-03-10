@@ -73,7 +73,7 @@ Docker设计的NAT网络模型，创建新Network Namepace，配置docker0网桥
 - `docker network disconnect NET_ID CT_ID`: disconnect
 
 
-## Exercises
+## Lab
 ### VM-VM Ping
 - in the host：
 ```bash
