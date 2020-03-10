@@ -1,4 +1,4 @@
-## TP: Wordpress
+# WordPress Lab
 
 - create 1 mysql deployment
   - `kubectl apply -f mysql-deployment.yml`

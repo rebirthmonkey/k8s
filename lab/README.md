@@ -1,2 +1,2 @@
-# k8s TP
-- [wordpress](wordpress/README.md)
+# k8s Lab
+- [wordpress Lab](wordpress/README.md)
