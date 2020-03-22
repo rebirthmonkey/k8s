@@ -11,11 +11,12 @@
 
 
 ## Auto-Install
+If you have a Ubuntu, try next method
 - `curl https://get.docker.com/ | sh`
 - `wget -qO- https://get.docker.com/ | sh`
 
 
-## Debian APT Installation
+## Ubuntu APT Installation
 ```bash
 sudo apt-get remove docker docker-engine docker.io
 sudo apt-get remove docker-compose
@@ -23,7 +24,7 @@ sudo apt-get install apt-transport-https ca-certificates curl software-propertie
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 sudo apt-get update
-sudo apt-get install docker-ce
+sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
 
 
@@ -34,18 +35,25 @@ sudo apt-get install docker-ce
 
 
 ## Chinese Docker Repo Mirrors
+(Skip)
 ```bash
 sudo vi /etc/docker/daemon.json
+```
+Add following content to the file
+```json
 {
   "registry-mirrors": ["https://registry.docker-cn.com"]
 }
+```
+Then
+```bash
 systemctl daemon-reload
 systemctl restart docker
 ```
 
 
 ## Test
-- `dockeer --version`
+- `docker --version`
 - `docker info`
 - `docker run hello-world`
 
