@@ -19,9 +19,9 @@ Docker中的volume机制允许你将宿主机上指定的目录或者文件，�
 
 #### Volume Mount
 
-使用``docker volume ...``创建的volume，指定存放在Docker􏰌􏰋􏰍的􏰇􏰈􏰎工作目录**/var/lib/docker/volumes**下。
+使用``docker volume ...``创建的volume，指定存放在Docker的工作目录**/var/lib/docker/volumes**下。
 
-如果在创建的容器时不指定volume，则会在该目录下创建一个临时volume。􏰏􏰋􏰐􏰀􏰆􏰈􏰒
+如果在创建的容器时不指定volume，则会在该目录下创建一个临时volume。
 
 - 在没有显示声明宿主机目录时，如``$ docker run -v /test ...``，Docker会默认在宿主机上创建一个临时目录/var/lib/docker/volumes/[VOLUME_ID]/_data，然后把它挂载到容器的指定的目录上。
 
@@ -31,7 +31,7 @@ Docker中的volume机制允许你将宿主机上指定的目录或者文件，�
 
 - 指定目录：Docker把宿主机指定的目录挂载到容器指定的目录上，如``$ docker run -v /home:/test ...``。
 
-此方法用于将宿主机􏰊􏰋􏰒􏰃上的任意目录或文件挂载到容器中与容器共享，但是这类挂载不可以通过􏰌􏰋􏰍􏰇􏰈``docker volume􏰏􏰋􏰐``管理。
+此方法用于将宿主机上的任意目录或文件挂载到容器中与容器共享，但是这类挂载不可以通过``docker volume``管理。
 
 ### tmpfs Mount
 
@@ -50,27 +50,28 @@ Docker中的volume机制允许你将宿主机上指定的目录或者文件，�
 
 - `docker run -d -p 80:80 -v VOL_ID:/usr/local/apache2/htdocs httpd`
 - `docker run -d -p 80:80 -v /usr/local/apache2/htdocs httpd`: a random volume will be created in `/var/lib/docker/volumes/XXX/_data`
-  - `echo "xxx" > /var/lib/docker/volumes/XXX/_data`
+- `echo "xxx" > /var/lib/docker/volumes/XXX/_data`
 
 ### Bind Mount
 Mount host dir to container volume
 - `docker container run -it --rm -v VOL_ID:path ubuntu:xenial`: attach a volume to a container
-  - `docker container run ... -v $(pwd):path...`: sync local dir to the container
-  - `docker container run ... -v $(pwd):path:rw ...`: setup *rw* permission for the volume
-  - `docker container run ... -v $(pwd):path:ro ...`: setup *ro* permission for the volume
+- `docker container run ... -v $(pwd):path...`: sync local dir to the container
+- `docker container run ... -v $(pwd):path:rw ...`: setup *rw* permission for the volume
+- `docker container run ... -v $(pwd):path:ro ...`: setup *ro* permission for the volume
 
 
 ## Exercises
 - `docker volume create vol1`
 - `docker container run -it --rm -v vol1:/data ubuntu:xenial /bin/bash`
-- in the container
+
+in the container
 ```bash
 ls /data # check the path in the container
 touch /data/xxx
 echo yyy > /data/xxx
 ```
 
-- in another terminal
+in another terminal
 ```bash
 docker container run -it --rm -v vol1:/data ubuntu:xenial /bin/bash`
 cat /data/xxx # check the previously created `xxx` file and its content
