@@ -35,7 +35,7 @@
   - `docker image pull gcr.io/nigelpoulton/tu-demo:v2`: download from a third-party registry
 - `docker image inspect ubuntu:xenial`: inspect an image
 - `docker image rm IMG_ID`: remove a local image
-  - `docker image rm $(docker image ls -q) -f`: delete all images on ths host
+  - `docker image rm $(docker image ls -q) -f`: delete all images on the host
 - `docker history IMG_ID`: display all the layers of an image
 
 
