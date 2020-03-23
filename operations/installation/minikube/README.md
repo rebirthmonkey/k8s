@@ -4,6 +4,11 @@ minikube is a single-node (VM) cluster
 
 ### Installation
 
+Here is the documentation for the installation:
+https://kubernetes.io/docs/tasks/tools/install-minikube/
+
+The following part is for macOS
+
 - `sudo apt-get update && sudo apt-get install -y curl virtualbox`
 - `curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.24.1/minikube-linux-amd64`
 - `chmod +x minikube`
