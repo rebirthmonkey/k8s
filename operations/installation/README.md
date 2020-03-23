@@ -17,8 +17,9 @@ More details can be find [here](https://www.e-learn.cn/content/qita/2054926).
 ## Manipulation
 ### kubectl Installation
 
-    curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-    curl -O https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kubectl
+Reference: https://kubernetes.io/docs/tasks/tools/install-kubectl/
+
+    curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
     chmod +x ./kubectl
     sudo mv ./kubectl /usr/local/bin/kubectl
     echo "source <(kubectl completion bash)" >> ~/.bashrc`: auto-completion in bashrc
