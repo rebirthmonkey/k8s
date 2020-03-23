@@ -1,6 +1,9 @@
 # 手动部署kubeadm
 仅用于理解组件之间的交互，但生产不推荐，因为无法维护、无法保证参数配置最佳，详见[参考文档](https://github.com/kelseyhightower/kubernetes-the-hard-way)。
 
+## Reference
+Here is the documentation for the installation:
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
 ## 安装准备
 Kubeadm安装Kubernetes 1.13准备工作 
