@@ -57,3 +57,7 @@ Cannot load hosts in configuration json file when starting docker daemon
 - `ExecStart=/usr/bin/dockerd`
 - `# -H fd://`
 
+## Ref
+Official documentation for installation:
+https://docs.docker.com/install/linux/docker-ce/ubuntu/
+
