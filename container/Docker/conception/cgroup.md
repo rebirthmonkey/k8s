@@ -56,7 +56,7 @@ PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND 1759 root 20 0 10956 1064 
 
 ```bash
 $ dd if=/dev/sda1 of=/dev/null
-# iptop查看
+# iotop查看
 TID PRIO USER DISK READ DISK WRITE SWAPIN IO> COMMAND
 8128 be/4 root 55.74 M/s 0.00 B/s 0.00 % 85.65 % dd if=/de~=/dev/null...
 $ mkdir /sys/fs/cgroup/blkio/mytest
