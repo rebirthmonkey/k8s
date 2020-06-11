@@ -7,6 +7,9 @@ minikube is a single-node (VM) cluster
 Here is the documentation for the installation:
 https://kubernetes.io/docs/tasks/tools/install-minikube/
 
+Installation in China:
+https://my.oschina.net/u/228832/blog/3079150
+
 The following part is for macOS
 
 - `sudo apt-get update && sudo apt-get install -y curl virtualbox`
