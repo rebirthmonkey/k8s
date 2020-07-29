@@ -61,23 +61,33 @@
 ### Download a MySQL image
 ```bash 
 docker image ls
-docker search mysql
-docker pull mysql
+docker search ubuntu:xenial
+docker pull ubuntu:xenial
 docker image ls
 docker ps -a
 ```
 
 ### Create a Ubuntu:Xenial Image with ifconfig
-- `docker container run -it --rm ubuntu:xenial /bin/bash`
+```bash
+docker run -it --rm ubuntu:xenial /bin/bash
+```
 - in this container terminal, run:
 ```bash
 ping 8.8.8.8 # it doesn't work since it doesn't have the ping tool
 apt update
-apt install iputils-ping
+apt install iputils-ping iproute2
 ping 8.8.8.8 # it works now!
 ```
 - from another terminal, run:
-  - `docker container ps`, where you can find `CT_ID`
-  - `docker container commit -m "xenial with ping" -a "USER_NAME" CT_ID ACCOUNT/xenial:net`
-  - `docker login`
-  - `docker image push ACCOUNT/xenial:net`
+  - find docker ID `CT_ID`
+```bash
+docker ps
+```
+  - push the new image to DockerHub
+```bash
+docker commit -m "xenial with ping" -a "USER_NAME" CT_ID ACCOUNT/xenial:net
+docker login
+docker image push ACCOUNT/xenial:net
+docker image tag ACCOUNT/xenial:net xenial:net
+```
+

@@ -5,7 +5,8 @@
 容器启动时创建Network Namepace，但不配置任何网络功能，以--net=none参数启动容器。容器启动后可以为容器配置网络。
 
 ```bash
-$ docker run --net=none ubuntu:xenial ip addr show
+$ docker run --net=none ACCOUNT/xenial:net ip addr show
+
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
 inet 127.0.0.1/8 scope host lo
 valid_lft forever preferred_lft forever inet6 ::1/128 scope host
@@ -16,19 +17,20 @@ valid_lft forever preferred_lft forever
 
 ### Container Network
 
-不创建Network Namepace，加入另一个运行中的容器的Network Namespace，以--net=container:<容器id>参数启动容器。k8s中的Pod就是基于container network健力的。
+不创建Network Namepace，加入另一个运行中的容器的Network Namespace，以--net=container:<容器id>参数启动容器。k8s中的Pod就是基于container network建立的。
 
 ```bash
-$ docker run -ti -d tlinux-64bit-v2.2.20170418:latest bash
-7e01a70419e7370536f1f7673d0454184cab1db1f179d352d9463d80c4adb42e
-$ docker run --net=container:7e01a70419e7 -ti -d tlinux-64bit- v2.2.20170418:latest bash 11ab481ed4787b6084dce73314ae37250a55ba717de6784c3281a7462ed39478 
-$ docker inspect --format '{{.State.Pid}}' 11ab481ed478
-13536
-$ docker inspect --format '{{.State.Pid}}' 7e01a70419e7
+$ docker run -it -d xenial:net bash
+a4f59725740788efc9ab3822d77e6d4714447c6854fcd8def30ec5f4415d5278
+$ docker run --net=container:a4f597257407 -it -d xenial:net bash 112d06adcaa2527d87ce9ed4b51ef1c3317d2ececbf19404d5402e8d710fa823 
+$ docker inspect --format '{{.State.Pid}}' 112d06adcaa2
+66156
+$ docker inspect --format '{{.State.Pid}}' a4f597257407
 12630
-$ ls -l /proc/13536/ns/net
-/proc/13536/ns/net -> net:[4026532355] 
-$ ls -l /proc/12630/ns/net /proc/12630/ns/net -> net:[4026532355]
+$ ls -l /proc/66156/ns/net
+/proc/66156/ns/net -> net:[4026532355] 
+$ ls -l /proc/65571/ns/net 
+/proc/65571/ns/net -> net:[4026532355]
 ```
 
 - `docker run -d -it --name=CT_ID ubuntu:xenial`
@@ -39,7 +41,7 @@ $ ls -l /proc/12630/ns/net /proc/12630/ns/net -> net:[4026532355]
 不创建Network Namepace，共享主机的Network Namespace，以--net=host参数启动容器。但是安全问题，容器可以操纵主机的网络配置。
 
 ```bash
-$ docker run --net=host -ti -d tlinux-64bit-v2.2.20170418:latest bash
+$ docker run --net=host -it -d xenial:net bash
 b55213be4c805925ecc4dc1bd7934a01dde6f085313e395777c137b957d91a05
 $ docker inspect --format '{{.State.Pid}}' b55213be4c80
 22865
@@ -48,8 +50,6 @@ $ ls -l /proc/1/ns/net
 $ ls -l /proc/22865/ns/net 
 /proc/22865/ns/net -> net:[4026531957]
 ```
-
-
 
 - `docker run -it --network=host ubuntu:xenial`: container and host share the same network stack
   - for the reason of performance 
@@ -78,12 +78,10 @@ Docker设计的NAT网络模型，创建新Network Namepace，配置docker0网桥
 - in the host：
 ```bash
 docker network create net1
-docker container run --name ct1 -it -d --net=net1 ubuntu:xenial
-docker container run --name ct2 -it --net=net1 ubuntu:xenial /bin/bash
+docker run --name ct1 -it -d --net=net1 xenial:net
+docker run --name ct2 -it --net=net1 xenial:net /bin/bash
 ```
 - in the container `ct2`: 
 ```bash
-apt update
-apt install iputils-ping
 ping ct1
 ```

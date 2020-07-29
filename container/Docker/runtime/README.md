@@ -15,14 +15,15 @@ Docker创建一个“容器进程”时，会先创建的一个容器初始化�
 ### run
 
 #### Run
-- `docker container run ubuntu:xenial /bin/bash`: tell Docker which process to run inside container to replace default CMD, but nothing can be shown in the terminal 
-- `docker container run -it ubuntu:xenial`: interactive mode, connect your terminal to the CT's bash shell
+- `docker run ubuntu:xenial /bin/bash`: tell Docker which process to run inside container to replace default CMD, but nothing can be shown in the terminal 
+- `docker run -it ubuntu:xenial`: interactive mode, connect your terminal to the CT's bash shell
   - `Ctrl-PQ`: exist and suspend the container 
-- `docker container run --name CT_Name ubuntu:xenial`: name of the container
-- `docker container run -it -d ubuntu:xenial`: detached mode (executing as daemon in background)
-- `docker container run -it --rm ubuntu:xenial`: remove after the execution
-- `docker container run -d -p 80:80 ubuntu:xenial`: NAT the port
-- `docker container run -d -P ubuntu:xenial`: NAT port of the container to a random port of the host
+- `docker run --name CT_Name ubuntu:xenial`: name of the container
+- `docker run -it -d ubuntu:xenial`: detached mode (executing as daemon in background)
+  - `docker attach CT_ID`: attach to the detached container, should input "ENTER"
+- `docker run -it --rm ubuntu:xenial`: remove after the execution
+- `docker run -d -p 80:80 ubuntu:xenial`: NAT the port
+- `docker run -d -P ubuntu:xenial`: NAT port of the container to a random port of the host
 
 #### Resource Limitation
 - `docker run -m 200M --memory-swap=300M ubuntu:xenial`
@@ -51,41 +52,41 @@ lrwxrwxrwx 1 root root 0 Aug 13 14:05 cgroup -> cgroup:[4026531835]lrwxrwxrwx 1 
 - `docker attach`: attach to the container's terminal
   - `docker attach CT_ID`
 - `docker exec`: run a new process inside the container
-  - `docker exec –it CT_ID /bin/bash`: here it attaches a running container with a bash
+  - `docker exec –it CT_ID /bin/bash`: it attaches a running container with a bash
 
 ### stop/kill/start/restart/rm
-- `docker container start CT_ID`: restart
-- `docker container stop CT_ID`: stop (send SIGTERM + SIGKILL)
-- `docker container kill CT_ID`: kill (send SIGKILL)
-- `docker container rm CT_ID`: remove a *stopped* container
-  - `docker container rm -f CT_ID`: force mode, remove a *running* container
-  - `docker container rm -f $(docker container ps -aq)`: remove all the containers
+- `docker start CT_ID`: restart
+- `docker stop CT_ID`: stop (send SIGTERM + SIGKILL)
+- `docker kill CT_ID`: kill (send SIGKILL)
+- `docker rm CT_ID`: remove a *stopped* container
+  - `docker rm -f CT_ID`: force mode, remove a *running* container
+  - `docker rm -f $(docker container ps -aq)`: remove all the containers
   
 ### pause/unpause
 - `docker pause CT_ID`
 - `docker unpause CT_ID`
 
 ### monitor
-- `docker container ps`
-- `docker container top CT_ID`
-- `docker container top`: real-time monitor
-- `docker logs CT_ID`
+- `docker ps`
+- `docker container top CT_ID`: real-time monitor
+- `docker logs CT_ID`: display logs inside a container
   - `docker logs -f CT_ID`: continue to display new logs 
 
 
 ## Exercises
 ### Basic
-- `docker container run hello-world`
-- `docker container ps`: we can't see the container `hello-world`
-- `docker container ps -a`: we can see all the containers including the stopped containers
-- `docker container run -it --rm ubuntu:xenial /bin/bash` 
-- from another terminal `docker container ps`: what's the difference between the previous case? Why?
+- `docker run hello-world`
+- `docker ps`: we can't see the container `hello-world`
+- `docker ps -a`: we can see all the containers including the stopped containers
+- `docker run -it --rm ubuntu:xenial /bin/bash` 
+- from another terminal
+  -  `docker container ps`: what's the difference between the previous case? Why?
 - in the container
 ```bash
 ps aux
 exit # `Ctrl-PQ`: exit the container
-docker container ps -a
-docker container exec -it CT_ID /bin/bash
+docker ps -a
+docker exec -it CT_ID /bin/bash
 ```
 
 ### Run a Web Server

@@ -49,20 +49,20 @@ Docker中的volume机制允许你将宿主机上指定的目录或者文件，�
 ### Volume Mount
 
 - `docker run -d -p 80:80 -v VOL_ID:/usr/local/apache2/htdocs httpd`
-- `docker run -d -p 80:80 -v /usr/local/apache2/htdocs httpd`: a random volume will be created in `/var/lib/docker/volumes/XXX/_data`
-- `echo "xxx" > /var/lib/docker/volumes/XXX/_data`
+  - `docker run -d -p 80:80 -v /usr/local/apache2/htdocs httpd`: a random volume will be created in `/var/lib/docker/volumes/VOL_ID/_data`
+  - `echo "xxx" > /var/lib/docker/volumes/VOL_ID/_data`
 
 ### Bind Mount
 Mount host dir to container volume
-- `docker container run -it --rm -v VOL_ID:path ubuntu:xenial`: attach a volume to a container
-- `docker container run ... -v $(pwd):path...`: sync local dir to the container
-- `docker container run ... -v $(pwd):path:rw ...`: setup *rw* permission for the volume
-- `docker container run ... -v $(pwd):path:ro ...`: setup *ro* permission for the volume
+- `docker run -it --rm -v VOL_ID:path ubuntu:xenial`: attach a volume to a container
+- `docker run ... -v $(pwd):path...`: sync local dir to the container
+- `docker run ... -v $(pwd):path:rw ...`: setup *rw* permission for the volume
+- `docker run ... -v $(pwd):path:ro ...`: setup *ro* permission for the volume
 
 
 ## Exercises
 - `docker volume create vol1`
-- `docker container run -it --rm -v vol1:/data ubuntu:xenial /bin/bash`
+- `docker run -it --rm -v vol1:/data ubuntu:xenial /bin/bash`
 
 in the container
 ```bash
@@ -73,6 +73,6 @@ echo yyy > /data/xxx
 
 in another terminal
 ```bash
-docker container run -it --rm -v vol1:/data ubuntu:xenial /bin/bash`
+docker run -it --rm -v vol1:/data ubuntu:xenial /bin/bash`
 cat /data/xxx # check the previously created `xxx` file and its content
 ```

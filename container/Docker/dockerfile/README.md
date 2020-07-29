@@ -32,15 +32,15 @@ Dockerfile specifies all the configurations to build an image.
 - `HEALTHCHECK`: 
 - `SHELL`: use which shell to execute commands
 
+## Lab
 
-## Build Image
+
+### Build Image
 - `docker image build` create a new image using the instructions in the Dockerfile
   - `docker image build -t apache2-demo:v1 .`: `-t` stands for tag/name 
   - `docker image build -t apache2-demo:v1 -f DockerfileXXX .`: `-f` use a Dockerfile with an arbitrary name
 - `docker image history apache2-demo`: show image build history 
 
-
-## ENV
 ### Shell Env
 - `docker build -t img1 -f Dockerfile-env .`: create the image
 - `docker run --name ct1 --rm img1`: see the default msg in default file /tmp/xxx.log
@@ -56,8 +56,6 @@ Dockerfile specifies all the configurations to build an image.
 - `docker run --name ct2 --rm -v $(pwd):/workspace img1`: launch the default script
 - `docker run --name ct2 --rm -v $(pwd):/workspace -e APP=/workspace/app2.py img1`: launch the new script
 
-
-## Example
 ### Apache2 Web Server
 - write a Dockerfile to create an image with packages php, apache (apache2, libapache2-mod-php)
 - add a index.php file with: `<?php phpinfo() ?>`
@@ -65,6 +63,6 @@ Dockerfile specifies all the configurations to build an image.
 See the [Dockerfile](Dockerfile) as the answer
 ```bash
 docker image build -t apache2-demo .
-docker container run -d -p 8885:80 apache2-demo
+docker run -d -p 8885:80 apache2-demo
 http://localhost:8885/index.php # test NAT access through browser
 ```

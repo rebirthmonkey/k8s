@@ -6,5 +6,5 @@ RUN apt update && \
 RUN echo "<?php phpinfo(); ?>" > /var/www/html/index.php
 
 EXPOSE 80
-#ENTRYPOINT ["apache2ctl"]
+
 CMD ["apache2ctl", "-D", "FOREGROUND"]
