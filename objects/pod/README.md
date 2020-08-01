@@ -43,7 +43,7 @@ k8s中资源的设置在pod中，由于 Pod 可以由多个 Container 组成，�
 - requests是在调度的时候使用的资源值，也就是kube-scheduler 只会按照 requests 的值进行计算。
 - limits是真正设置 Cgroups 限制的值。
 
-k8s认为容器化作业在提交时所设置的资源边界，并不一定是调度系统所必须严格遵守的，因为大多数作业使用到的资源其实远小于它所请求的资源限额。基于这种假设，Borg 在作业被提交后，会主动减小它的资源限额配置，以便容纳更多的作业、提升资源利用率。而当作业资源使用量增加到一定阈值时，Borg 会还原作业原始的资源限额，防止出现异常情况。而 Kubernetes 的 requests+limits 的做法，其实就是上述思路的一个简化版。用户在提交 Pod 时，可以声明一个相对较小的 requests 值供调度器使用，而 Kubernetes 真正设置给容器 Cgroups 的，则是相对较大的 limits 值，所以requests永远小于limits。
+k8s认为容器化作业在提交时所设置的资源边界，并不一定是调度系统所必须严格遵守的，因为大多数作业使用到的资源其实远小于它所请求的资源限额。基于这种假设，Borg 在作业被提交后，会主动减小它的资源限额配置，以便容纳更多的作业、提升资源利用率。而当作业资源使用量增加到一定阈值时，Borg 会还原作业原始的资源限额，防止出现异常情况。而 k8s 的 requests+limits 的做法，其实就是上述思路的一个简化版。用户在提交 Pod 时，可以声明一个相对较小的 requests 值供调度器使用，而 k8s 真正设置给容器 Cgroups 的，则是相对较大的 limits 值，所以requests永远小于limits。
 
 ### Storage
 pod-level storage which will be deleted when pod is destroyed.  
@@ -184,52 +184,51 @@ It cannot be managed by the API server, so it cannot be managed by ReplicationCo
 
 
 ## Lab
-### 1 Pod with 1 Container
+### Pod with 1 Container
 - `kubectl create -f pod1.yaml`
-- `kubectl exec -it pod1 -- env`
+- `kubectl exec pod1 -- env`
 - `kubectl exec -it pod1 -- /bin/sh`
 - `kubectl describe pod pod1`: get IP address
 - `ping POD1_IP`: can ping pod1
 
-### 1 Pod with 2 Containers
+### Pod with 2 Containers and shared EmptyDir
 - `kubectl create -f pod2.yaml`
 - `kubectl exec -it pod2 -c ct-nginx -- /bin/bash`
-  - `apt-get update`
-  - `apt-get install curl`
+  - `apt update`
+  - `apt install curl`
   - `curl localhost`: get the hello message from the container
 - `kubectl describe pod pod2`: get IP address
 - `curl POD2_IP`: get the hello message from the node
-- `kubectl exec -it pod2 -c ct-debian -- /bin/bash`
+- `kubectl exec -it pod2 -c ct-busybox -- /bin/bash`
   - `echo Chanage message from pod2-ct-busybox > /data/index.html `
 - `curl POD2_IP`: get the new message from the node
 
 ### Pod with resource limitation
-- `kubectl apply -f pod3.yaml`
-这个pod状态变为**OOMKilled**，因为它是内存不足所以显示Container被杀死
+- `kubectl apply -f pod3.yaml`: 这个pod状态变为**OOMKilled**，因为它是内存不足所以显示Container被杀死
 
 
-### Pod Liveness CMD Check
-- `kubectl apply -f pod-liveness-cmd.yaml`
-- `kubectl get pods`: 通过查看发现liveness-exec的RESTARTS在30秒后由于检测到不健康一直在重启
+### Pod with Liveness CMD Check
+- `kubectl apply -f pod4-liveness-cmd.yaml`
+- `kubectl get pods`: 通过查看发现liveness-exec的RESTARTS在10秒后由于检测到不健康一直在重启
 
-### Pod Liveness HTTP Check
-- `kubectl apply -f pod-liveness-http.yaml`: `k8s.gcr.io/liveness`镜像会使`/healthz`服务时好时坏
+### Pod with Liveness HTTP Check
+- `kubectl apply -f pod5-liveness-http.yaml`: `k8s.gcr.io/liveness`镜像会使`/healthz`服务时好时坏
 - `kubectl get pods`
 - `curl 192.168.2.19:8080/healthz`
 
-### Pod NodeSelector
+### Pod with NodeSelector
 - `kubectl label nodes node01 disktype=ssd`
 - `kubectl get nodes node01 --show-labels`
-- `kubectl apply -f pod-nodeSelector.yaml`
+- `kubectl apply -f pod6-nodeSelector.yaml`
 - `kubectl get pod -o wide`
 
 ### InitContainer
-- `kubectl apply -f pod-initcontainer.yaml`: the init CT creates the file 'testfile'
-- `kubectl exec -it myapp-pod -- ls /storage/`
+- `kubectl apply -f pod7-initcontainer.yaml`: the init CT creates the file 'testfile'
+- `kubectl exec pod7-initcontainer -- ls /storage/`
 
 ### Static Pod
-- `mv pod-static.yaml /etc/kubernetes/manifests/`：kubelet就会自动启动static pod
+- `mv pod8-static.yaml /etc/kubernetes/manifests/`：kubelet就会自动启动该目录下的static pod
 - `kubectl get pod`
-- `kubectl delete pod`
+- `kubectl delete pod pod8-static`
 - `kubectl get pod`：看到有删除该pod，但是是骗人的
 

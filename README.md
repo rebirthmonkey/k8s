@@ -6,6 +6,6 @@
 
 ## K8s Tutorial
 
-- [k8s installation](operations/installation/README.md)
-- [k8s objects](objects/README.md)
+- [k8s Installation](operations/installation/README.md)
+- [k8s API Objects](objects/README.md)
 - [Lab](lab/README.md)

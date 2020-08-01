@@ -18,7 +18,7 @@ spec:
     volumeMounts:
     - name: data
       mountPath: /data
-    command: ['/bin/sh', '-c', 'echo Hello from the debian container > /data/index.html && sleep 3000']
+    command: ['/bin/sh', '-c', 'echo Hello from the pod2/ct-busybox container > /data/index.html && sleep 3000']
   volumes:
   - name: data
     emptyDir: {}

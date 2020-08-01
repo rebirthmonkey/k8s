@@ -6,7 +6,14 @@
 
 
 ## Conception
-- [conception](conception/README.md)
+![Docker Main Components](/Users/ruan/workspace/k8s/container/Docker/figures/docker-architecture-6272685.png)
+
+- Docker client: send commands
+- Docker Daemon: server to handle requests
+  - `/etc/systemd/system/multi-user.target.wants/docker.serivce` `-H tcp://0.0.0.0`: configuration to accept remote requests (no need to do)
+  - `systemctl daemon-reload` and `systemctl restart docker.service`
+  - `docker -H 192.168.88.8 info`: example (no need to do)
+- Registry: host Docker images
 
 
 ## Image

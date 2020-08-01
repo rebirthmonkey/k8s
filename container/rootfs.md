@@ -28,7 +28,7 @@
 
   更重要的是，一旦镜像被发布，任何环境使用这个镜像启动的容器都完全一致，可以完全复现镜像制作者当初的完整环境，这也就是容器技术“强一致性”的重要体现。基于aufs 的容器镜像的发明，不仅打通了“开发 - 测试 - 部署”流程的每一个环节，更重要的是：容器镜像将会成为未来软件的主流发布方式。
 
-  
+
 ## 操作
 
 
@@ -44,23 +44,73 @@
 
 
 
-### 上层覆盖下层
+## Exercises
 
-![image-20200127222349895](figures/image-20200127222349895.png)
+### aufs
 
-### 可写层覆盖下层
+- 上层覆盖下层
 
-![image-20200127222419303](figures/image-20200127222419303.png)
+```bash
+$ grep aufs /proc/filesystems
+nodev aufs
+[root@TENCENT64 /data/kendywang/test]$ tree .
+|-- aufs-mnt
+|-- container-layer
+|-- image-layer-high
+| |-- image-layer-high.txt
+| `-- x.txt
+`-- image-layer-low
+|-- image-layer-low.txt `-- x.txt
+$ mount -t aufs -o dirs=./container-layer:./image-layer-high:./image-layer-low none ./aufs-mnt
+$ mount -t aufs
+none on /data/kendywang/test/aufs-mnt type aufs (rw,relatime,si=e7b69dd2200efd9f)
+$ cat /sys/fs/aufs/si_e7b69dd2200efd9f/*
+/data/kendywang/test/container-layer=rw /data/kendywang/test/image-layer-high=ro /data/kendywang/test/image-layer-low=ro
+$ ls /data/kendywang/test/aufs-mnt
+image-layer-high.txt image-layer-low.txt x.txt
+$ cat /data/kendywang/test/aufs-mnt/x.txt
+x.txt from image layer high.
+```
 
-### 写时拷贝
+- 新增读写层
 
-![image-20200127222447634](figures/image-20200127222447634.png)
+```bash
+$ echo "I am container layer." >> /data/kendywang/test/aufs-mnt/container- layer.txt
+$ cat /data/kendywang/test/aufs-mnt/container-layer.txt
+I am container layer.
+$ cat /data/kendywang/test/container-layer/container-layer.txt
+I am container layer.
+```
 
-### 删除文件通过whiteout标识
+- 写时拷贝
 
-![image-20200127222512803](figures/image-20200127222512803.png)
+```bash
+#修改文件
+$ echo "modify txt" >> /data/kendywang/test/aufs-mnt/image-layer-low.txt $ cat /data/kendywang/test/aufs-mnt/image-layer-low.txt
+I am image layer low.
+modify txt
+#image-layer-low目录文件没有改变
+$ cat /data/kendywang/test/image-layer-low/image-layer-low.txt
+I am image layer low.
+#被修改文件copy到了container-layer
+$ cat /data/kendywang/test/container-layer/image-layer-low.txt
+I am image layer low. modify txt
+```
 
-### 总结
+- 通过whiteout删除文件
 
-![image-20200127222545421](figures/image-20200127222545421.png)
+```bash
+$ cat /data/kendywang/test/aufs-mnt/image-layer-high.txt
+I am image layer high.
+$ rm /data/kendywang/test/aufs-mnt/image-layer-high.txt $ cat /data/kendywang/test/aufs-mnt/image-layer-hight.txt cat: image-layer-hight.txt: No such file or directory
+$ cat /data/kendywang/test/image-layer-high/image-layer-high.txt
+I am image layer high.
+$ ls -a /data/kendywang/test/container-layer/.wh.image-layer-high.txt
+/data/kendywang/test/container-layer/.wh.image-layer-high.txt
+```
+
+- 总结
+
+![image-20200202121527484](/Users/ruan/workspace/k8s/container/figures/image-20200202121527484.png)
+
 

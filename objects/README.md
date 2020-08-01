@@ -8,7 +8,7 @@ k8s API对象的定义大多可以分为Metadata和Spec两个部分。前者存�
 - metadata：元数据，它是API对象的“标识”，即从k8s里找到这个对象的主要依据
   - Labels：一组key-value格式的标签，表示对象的某些属性。Deployment使用label的过滤规则的Deployment的“spec.selector.matchLabels”字段，被称为Label Selector。
   - Annotations：携带key-value格式的内部信息，被k8s本身使用。多数Annotations都是自动被k8s加上的。
-- sepc：自定义数据
+- spec：自定义数据
 
 ```yaml
 apiVersion: apps/v1

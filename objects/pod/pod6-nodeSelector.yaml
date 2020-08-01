@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: nginx
+  name: pod6-node-selector
   labels:
     env: test
 spec:

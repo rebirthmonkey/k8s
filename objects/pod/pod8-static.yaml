@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: static-web
+  name: pod8-static
   labels:
     role: myrole
 spec:
   containers:
     - name: web
-      image: nginx
+      image: nginx:latest
       imagePullPolicy: IfNotPresent
       ports:
         - name: web
