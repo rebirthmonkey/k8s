@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment2-hpa
+  labels:
+    label-dep: value-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      label-pod: value-pod
+  template:
+    metadata:
+      labels:
+        label-pod: value-pod
+    spec:
+      containers:
+      - name: ct-busyboxplus
+        image: radial/busyboxplus
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        command: ['/bin/sh', '-c',  'sleep 300000']

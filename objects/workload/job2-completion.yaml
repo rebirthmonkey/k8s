@@ -1,16 +1,16 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: busyboxplus
+  name: job2-completion
 spec:
-  completions: 10       //执行job的次数
-  parallelism: 1        //执行job的并发数
+  completions: 10
+  parallelism: 2 
   template:
     metadata:
       name: busyboxplus
     spec:
       containers:
-        - name: busyboxplus
+        - name: ct-busyboxplus
           image: radial/busyboxplus
           imagePullPolicy: IfNotPresent
           command: ["echo", "hello"]
