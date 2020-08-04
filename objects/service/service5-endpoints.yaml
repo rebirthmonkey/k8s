@@ -1,9 +1,9 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: external-nginx
+  name: service5-endpoints
 spec:
   ports:
   - protocol: TCP
-    targetPort: 80
+    targetPort: 30888
     port: 80

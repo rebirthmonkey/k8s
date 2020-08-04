@@ -7,35 +7,33 @@
 We can consider ConfigMap as a PV/dir which contains a set of *variables* or files.  
 
 - variables (key-value): if cm is mounted, key is displayed as file in the dir, value as content of the file
-- file: if cm is mounted, file is displayed as fil in the dir
+- file: if cm is mounted, file is displayed as file in the dir
 
 #### CMD
 
 - create
-  - `kubectl create -f cm.yaml`: create from a YAML file
-  - `kubectl create configmap cm1 --from-file=./configs`: create from a host dir 
-  - `kubectl create configmap cm2 --from-file=./configs/db.conf --from-file=./configs/cache.conf`: create from a host file
-  - `kubectl create configmap cm3 --from-literal=key1=value1`: create from a key-value
+  - `kubectl apply -f cm1.yaml`: create from a YAML file
+  - `kubectl apply -f cm1-pod-env.yaml`：create a pod with the cm
+  - `kubectl exec cm1-pod-env -- env`: display the env variables
+  - `kubectl create configmap cm2 --from-file=./configs`: create from a host dir 
+  - `kubectl create configmap cm3 --from-file=./configs/db.conf --from-file=./configs/cache.conf`: create from a host file
+  - `kubectl create configmap cm4 --from-literal=key1=value1`: create from a key-value
 - apply: pass CM as file to ENV
-  - `kubectl create -f pod-cm-env1.yaml`
-  - `kubectl logs test-container`
+  - `kubectl apply -f cm5-pod-env.yaml`
+  - `kubectl logs cm5-pod-env`
 - apply: pass CM as data to ENV
-  - `kubectl create -f pod-cm-env2.yaml`
-  - `kubectl logs storage-cm-env`
+  - `kubectl create -f cm6-pod-env.yaml`
+  - `kubectl logs cm6-pod-env`
 - mount Config to pod as volume: key-->文件名，value-->文件的内容
-  - `kubectl create -f pod-cm-vol.yaml`
-  - `kubectl exec -it storage-cm-env -- /bin/bash`
+  - `kubectl create -f cm7-pod-vol.yaml`
+  - `kubectl exec cm7-pod-vol -- ls /etc/config`
 
 
 ### Secret
 
-创建时会用BASE64编码之后以同ConfigMap相同的方式存到Etcd，当mount到一个pod时会先解密在挂载
+创建secret时会用BASE64编码之后以同ConfigMap相同的方式存到Etcd，当mount到一个pod时会先解密在挂载
 
-#### 使用场景
-
-- docker-registry
-- generic
-- tls
+使用场景：docker-registry、generic、tls
 
 #### 编码、解码
 
@@ -46,28 +44,29 @@ We can consider ConfigMap as a PV/dir which contains a set of *variables* or fil
 
 #### CMD
 
-- `kubectl create -f secret.yaml`
+- `kubectl apply -f secret1.yaml`
 - `kubectl get secret`
-- `kubectl create -f pod-secret-env.yaml`
-- `kubectl create -f pod-secret-volume.yaml`
+- `kubectl apply -f secret2.yaml`
+- `kubectl apply -f secret2-pod-env.yaml`
+- `kubectl apply -f secret3-pod-volume.yaml`
+- `kubectl exec secret3-pod-volume -- ls /xxx`
 
 ## Volume-based
 
 ### Pod Volume
 必须在定义pod的时候同时定义pod volume，其生命周期为pod的生命周期。
 
-Attached to a pod and has the same life-cycle as the pod, deleted when the pod is destroyed. 
 Volume is always hosted by each local node. 
 
 #### emptyDir
 Create a new empty dir for the volume
-- `kubectl create -f pod-vol-emptydir.yaml`
-- `kubectl exec -it storage-vol-emptydir -- /bin/bash`: manipulate on the volume
+- `kubectl create -f vol1-emptydir.yaml`
+- `kubectl exec vol1-emptydir -- ls /data`: manipulate on the volume
 
 #### hostPath
 Use an existing dir for the volume
-- `kubectl create -f pod-vol-hostpath.yaml`
-- `kubectl exec -it storage-vol-hostpath -- /bin/bash`: manipulate on the volume
+- `kubectl create -f vol2-hostpath.yaml`
+- `kubectl exec vol2-hostpath -- ls /data`: manipulate on the volume
 
 
 ### Persistent Volume
@@ -93,14 +92,15 @@ PV is not hosted on a node, it belongs to the k8s cluster.
 - Failed – 卷自动回收失败
 
 ##### CMD
-- `kubectl apply -f pv.yaml`
+- `kubectl apply -f pv1.yaml`
 
 #### PersistentVolumeClaim (VPC)
 用户对于存储资源的申请。
 PVC is used to create a PV which will be later declared and used in a pod.
 
-- `kubectl apply -f pvc.yaml`: create a PVC
-- `kubectl apply -f pod-pvc.yaml`
+- `kubectl apply -f pvc1.yaml`: create a PVC which will bound to the PV1
+- `kubectl apply -f pvc1-pod.yaml`
+- `kubuctl exec pvc1-pod -- ls /data`
 
 #### Storage Class
 - `kubectl create -f sc.yaml`: create a default storage class

@@ -74,12 +74,10 @@ The main difference between rs and dpl is that dpl may use 2 rs for rolling upgr
 - `kubectl rollout history deployment deployment1 --revision=1`
 - `kubectl rollout undo deployment deployment1 --to-revision=1`
 
-#### Auto-scale
+#### HPA
 - `kubectl apply -f deployement2-hpa.yaml`
-- `kubectl autoscale deployments deployment2-hpa --min=1 --max=5 --cpu-percent=1`
-- `kubectl exec -it deployment2-hpa-xxxx sh`
-  - `while true;do touch 123;done`: to increase the cpu-percentage 
-  
+- `kubectl autoscale deployments deployment2-hpa --min=1 --max=5 --cpu-percent=10`
+- `ab -kc 20000 -n 10000000 http://localhost:30888/`
 
 
 ## DaemonSet

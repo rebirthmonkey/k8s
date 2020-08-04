@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: service1-dep-node-port
   labels:
     app: nginx
 spec:
@@ -24,7 +24,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: svc1
+  name: service1-node-port
 spec:
   selector:
     app: nginx

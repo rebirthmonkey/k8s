@@ -1,19 +1,20 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: storage-vol-hostpath
+  name: vol2-hostpath
 spec:
   restartPolicy: Never
   volumes:
-  - name: data-vol
+  - name: vol-data
     hostPath:
       path: /tmp
       type: Directory
 
   containers:
-  - name: debian-vol-hostpath
-    image: debian
+  - name: ct-busybox
+    image: busybox
+    imagePullPolicy: IfNotPresent
     volumeMounts:
-    - name: data-vol
+    - name: vol-data
       mountPath: /data
     command: ['/bin/sh', '-c', 'sleep 3000']

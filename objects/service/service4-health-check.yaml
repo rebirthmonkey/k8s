@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-health
+  name: service4-dep-health-check
 spec:
   replicas: 2
   selector:
@@ -13,10 +13,10 @@ spec:
         app: service-health
     spec:
       containers:
-        - name: service-health
+        - name: ct-service4-health-check
           image: python:2.7
           imagePullPolicy: IfNotPresent
-          command: ["/bin/bash","-c","echo \$(hostname) > index.html && sleep 60 && python -m SimpleHTTPServer 8080"]
+          command: ['/bin/bash','-c','echo \$(hostname) > index.html && sleep 60 && python -m SimpleHTTPServer 8080']
           ports:
             - containerPort: 8080
           readinessProbe:

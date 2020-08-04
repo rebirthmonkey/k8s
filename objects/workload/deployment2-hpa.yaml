@@ -3,21 +3,34 @@ kind: Deployment
 metadata:
   name: deployment2-hpa
   labels:
-    label-dep: value-dep
+    app: nginx
 spec:
   replicas: 1
   selector:
     matchLabels:
-      label-pod: value-pod
+      app: nginx
   template:
     metadata:
       labels:
-        label-pod: value-pod
+        app: nginx
     spec:
       containers:
-      - name: ct-busyboxplus
-        image: radial/busyboxplus
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 80
-        command: ['/bin/sh', '-c',  'sleep 300000']
+        - name: nginx
+          image: nginx:1.9.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-deployment2-hpa
+spec:
+  selector:
+    app: nginx
+  type: NodePort
+  ports:
+    - protocol: TCP
+      targetPort: 80
+      port: 8888
+      nodePort: 30888

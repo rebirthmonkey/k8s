@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pod7-initcontainer
+  name: pod8-initcontainer
   labels:
     app: myapp
 spec:
@@ -15,7 +15,7 @@ spec:
       volumeMounts:
         - name: storage
           mountPath: /storage
-      command: ['sh', '-c', 'if [ -f /storage/testfile ] ; then touch /storage/xxx sleep 3600000 ; fi']
+      command: ['sh', '-c', 'if [ -f /storage/testfile ] ; then touch /storage/xxx && sleep 3600 ; fi']
   initContainers:
     - name: init-containers
       image: radial/busyboxplus

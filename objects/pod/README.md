@@ -81,13 +81,7 @@ pod-level storage which will be deleted when pod is destroyed.
 
 ### initContainer
 
-在Pod中，只有当所有Init Container定义的容器都运行完之后，才会初始化pod中的containers。Init Container容器会按顺序逐一启动，而直到它们都启动并且退出了，用户容器才会启动。
-
-- `vim dpl.yaml`
-
-  spec:
-    initContainers:
-    containers:
+在Pod中，只有当所有Init Container定义的容器都运行完之后，才会初始化 pod 中的正式containers。Init Container容器会按顺序逐一启动，而直到它们都启动并且退出了，用户容器才会启动。
 
 ### Static Pod
 
@@ -216,15 +210,22 @@ It cannot be managed by the API server, so it cannot be managed by ReplicationCo
 - `kubectl get pods`
 - `curl 192.168.2.19:8080/healthz`
 
+### Pod with Liveness TCP Check
+
+- `kubectl apply -f pod6-liveness-tcp.yaml`
+- `kubectl get pods`
+
 ### Pod with NodeSelector
 - `kubectl label nodes node01 disktype=ssd`
 - `kubectl get nodes node01 --show-labels`
-- `kubectl apply -f pod6-nodeSelector.yaml`
+- `kubectl apply -f pod7-nodeSelector.yaml`
 - `kubectl get pod -o wide`
 
 ### InitContainer
-- `kubectl apply -f pod7-initcontainer.yaml`: the init CT creates the file 'testfile'
-- `kubectl exec pod7-initcontainer -- ls /storage/`
+- `kubectl apply -f pod8-initcontainer.yaml`: the init CT creates the file 'testfile'
+- `kubectl exec pod8-initcontainer -- ls /storage/`
+
+问题：为啥pod经常 CrashLoopBackOff ？
 
 ### Static Pod
 - `mv pod8-static.yaml /etc/kubernetes/manifests/`：kubelet就会自动启动该目录下的static pod

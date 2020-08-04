@@ -1,12 +1,13 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: storage-cm-vol
+  name: cm7-pod-vol
 spec:
   restartPolicy: Never
   containers:
-    - name: debian-cm-vol
-      image: debian
+    - name: ct-busybox
+      image: radial/busyboxplus
+      imagePullPolicy: IfNotPresent
       command: [ "/bin/sh", "-c", "sleep 3000" ]
       volumeMounts:
       - name: config-vol
@@ -14,4 +15,4 @@ spec:
   volumes:
     - name: config-vol
       configMap:
-        name: storage
+        name: cm1
