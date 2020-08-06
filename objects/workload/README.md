@@ -75,9 +75,11 @@ The main difference between rs and dpl is that dpl may use 2 rs for rolling upgr
 - `kubectl rollout undo deployment deployment1 --to-revision=1`
 
 #### HPA
+The **metric-server** should be installed.
 - `kubectl apply -f deployement2-hpa.yaml`
 - `kubectl autoscale deployments deployment2-hpa --min=1 --max=5 --cpu-percent=10`
-- `ab -kc 20000 -n 10000000 http://localhost:30888/`
+- `kubectl run -it --rm load-generator --image=busybox /bin/sh`
+  - `while true; do wget -q -O- http://deployment2-hpa-service; done`
 
 
 ## DaemonSet

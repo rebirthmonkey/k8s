@@ -15,22 +15,26 @@ spec:
         app: nginx
     spec:
       containers:
-        - name: nginx
+        - name: ct-nginx
           image: nginx:1.9.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 200m
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-deployment2-hpa
+  name: deployment2-hpa-service
+  labels:
+    app: nginx
 spec:
   selector:
     app: nginx
-  type: NodePort
   ports:
-    - protocol: TCP
-      targetPort: 80
-      port: 8888
-      nodePort: 30888
+    - port: 80

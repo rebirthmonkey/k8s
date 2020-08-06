@@ -1,8 +1,15 @@
 # Network
-## Intra-Host Network
-### None
 
-容器启动时创建Network Namepace，但不配置任何网络功能，以--net=none参数启动容器。容器启动后可以为容器配置网络。
+Linux容器能看见的“网络栈”是被隔离在它自己的Network Namespace中的网卡（Network Interface）、回环设备（Loopback Device）、路由表（Routing Table）和 iptables 规则。对于一个进程来说，这些要素实就构成了它发起和响应网络请求的基本环境。
+
+## Intra-Host Network
+
+
+
+### none
+
+
+**none**网络模式创建Network namepace，但不配置任何网络功能，容器启动后可以自行为容器配置网络。容器启动时创建Network Namepace，但不配置任何网络功能，以--net=none参数启动容器。容器启动后可以为容器配置网络。
 
 ```bash
 $ docker run --net=none ACCOUNT/xenial:net ip addr show
@@ -13,9 +20,11 @@ valid_lft forever preferred_lft forever inet6 ::1/128 scope host
 valid_lft forever preferred_lft forever
 ```
 
-
-
 ### Container Network
+
+### container
+
+如果指定–net=container，**container**网络模式不创建Network Namepace，而是加入另一个运行中的容器的Network namespace。K8s中pod的网络就使用了该模式，pod中的容器都会加入pod-init容器创建的Network namespace中。
 
 不创建Network Namepace，加入另一个运行中的容器的Network Namespace，以--net=container:<容器id>参数启动容器。k8s中的Pod就是基于container network建立的。
 
@@ -38,7 +47,7 @@ $ ls -l /proc/65571/ns/net
 
 ### Host
 
-不创建Network Namepace，共享主机的Network Namespace，以--net=host参数启动容器。但是安全问题，容器可以操纵主机的网络配置。
+不创建Network Namepace，共享主机的Network Namespace，以--net=host参数启动容器。它会和宿主机上的其他普通进程一样，直接共享宿主机的网络栈。但是安全问题，容器可以操纵主机的网络配置。
 
 ```bash
 $ docker run --net=host -it -d xenial:net bash
@@ -57,11 +66,15 @@ $ ls -l /proc/22865/ns/net
 
 ### Bridge
 
-Docker设计的NAT网络模型，创建新Network Namepace，配置docker0网桥，创建、配置对应的veth pair，依赖iptables规则，以--net=bridge参数启动容器。
-
-容器之间通过docker0网桥实现互访，容器通过iptable NAT功能访问外网，同时容器通过宿主机端口映射对外暴露服务。
+**bridge**网络模式是Docker默认的网络模式，它创建新Network Namepace、配置docker0 Linux bridge、创建veth pair，并且创建iptables NAT规则。同一宿主机上的容器之间通过docker0网桥互访，容器访问外网通过iptable NAT功能，容器可以通过宿主机端口映射对外暴露服务。
 
 ![image-20200202153831519](figures/image-20200202153831519.png)
+
+### overlay
+
+Docker原生的跨主机通信模型，核心是Linux网桥与vxlan隧道，并且通过KV系统（consul、etcd）同步路由信息。
+
+![image-20200123234145099](/Users/ruan/workspace/k8s/container/Docker/network/figures/image-20200123234145099.png) 
 
 - `docker network list`: list all the networks
 - `docker network inspect NET_ID`: show detailed information

@@ -25,5 +25,5 @@
 
 
 ## Tools
-- [Helm](tools/helm/README.md)
+- [Helm](installation/helm/README.md)
 
