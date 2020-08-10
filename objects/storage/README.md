@@ -28,8 +28,9 @@ We can consider ConfigMap as a PV/dir which contains a set of *variables* or fil
   - `kubectl create -f cm7-pod-vol.yaml`
   - `kubectl exec cm7-pod-vol -- ls /etc/config`
 
-
 ### Secret
+
+Secret是用来保存和传递密码、密钥、认证凭证这些敏感信息的对象。使用Secret的好处是可以避免把敏感信息明文写在配置文件里。在K8s集群中配置和使用服务不可避免的要用到各种敏感信息实现登录、认证等功能，例如访问AWS存储的用户名密码。为了避免将类似的敏感信息明文写在所有需要使用的配置文件中，可以将这些信息存入一个Secret对象，而在配置文件中通过Secret对象引用这些敏感信息。这种方式的好处包括：意图明确，避免重复，减少暴露机会。
 
 创建secret时会用BASE64编码之后以同ConfigMap相同的方式存到Etcd，当mount到一个pod时会先解密在挂载
 
@@ -52,6 +53,8 @@ We can consider ConfigMap as a PV/dir which contains a set of *variables* or fil
 - `kubectl exec secret3-pod-volume -- ls /xxx`
 
 ## Volume-based
+
+PV和PVC使得K8s集群具备了存储的逻辑抽象能力，使得在配置Pod的逻辑里可以忽略对实际后台存储技术的配置，而把这项配置的工作交给PV的配置者，即集群的管理者。存储的PV和PVC的这种关系，跟计算的Node和Pod的关系是非常类似的；PV和Node是资源的提供者，根据集群的基础设施变化而变化，由K8s集群管理员配置；而PVC和Pod是资源的使用者，根据业务服务的需求变化而变化，由K8s集群的使用者即服务的管理员来配置。
 
 ### Pod Volume
 必须在定义pod的时候同时定义pod volume，其生命周期为pod的生命周期。

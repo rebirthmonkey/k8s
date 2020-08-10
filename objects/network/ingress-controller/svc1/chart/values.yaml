@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: bigwhite/ingress-controller-demo-svc1
-  tag: v0.1
+  repository: wukongsun/nginx-ingress-demo-svc1
+  tag: 0.1
   pullPolicy: IfNotPresent
 
 service:

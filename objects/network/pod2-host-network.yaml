@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod2-host-network
+  labels:
+    app: webapp
+spec:
+  hostNetwork: true
+  containers:
+    - name: ct-nginx
+      image: nginx:1.9.0
+      ports:
+        - containerPort: 80

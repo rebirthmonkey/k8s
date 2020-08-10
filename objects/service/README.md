@@ -1,5 +1,7 @@
 # Service
 ## Introduction
+Service 是应用服务的抽象，通过 labels 为应用提供负载均衡和服务发现。匹配 labels 的 Pod IP 和端口列表组成 endpoints，由 kube-proxy 负责将服务 IP 负载均衡到这些 endpoints 上。每个 Service 都会自动分配一个 cluster IP（仅在集群内部可访问的虚拟地址）和 DNS 名，其他容器可以通过该地址或 DNS 来访问服务，而不需要了解后端容器的运行。
+
 Service的主要作用是作为Pod的代理入口，从而代替Pod对外暴露一个固定的网络地址。K8s之所以需要Service，一方面是因为Pod的 IP不是固定的，另一方面则是因为一组Pod实例之间总会有负载均衡的需求。
 
 被Service的selector 选中的 Pod，就称为 Service 的 Endpoints，你可以使用 kubectl get ep 命令看到它们。只有处于 Running 状态，且 readinessProbe 检查通过的 Pod，才会出现在 Service 的 Endpoints 列表里。并且，当某一个 Pod 出现问题时，k8s 会自动把它从 Service 里摘除掉。

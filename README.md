@@ -1,11 +1,11 @@
 # Docker & K8s Tutorial
 
-## Docker Tutorial
+## Container Tutorial
 
-- [Docker Tutorial](container/Docker/README.md)
+- [Container Tutorial](container/README.md)
 
 ## K8s Tutorial
 
-- [k8s Installation](installation/README.md)
-- [k8s API Objects](objects/README.md)
-- [Lab](lab/README.md)
+- [Installation](installation/README.md)
+- [API Objects](objects/README.md)
+- [Labs](lab/README.md)
