@@ -65,25 +65,28 @@ spec:
 helm install nginx-ingress-controller --namespace kube-system stable/nginx-ingress # ingress controller安装在localhost的80和443端口
 ```
 - Check Installation
-  - `helm install svc0 ./svc0`
-  - `kubect get ingress -o wide`: check if the backend endpoints are bound
-  - `vim /etc/hosts`
-    - xxx.com 127.0.0.1
-  - `curl -H 'Host:svc0.xxx.com' 127.0.0.1:80`: check the ingress
+```bash
+helm install svc1 ./svc1/chart
+kubect get ingress -o wide # check if the backend endpoints are bound
+vim /etc/hosts # xxx.com 127.0.0.1
+curl -H 'Host:svc1.xxx.com' 127.0.0.1:80 # check the ingress
+```
 - Troubleshooting
-  - `kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-qf6gw -- cat /etc/nginx/nginx.conf`
-  - `kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-qf6gw -- tail /var/log/nginx/error.log`
+```bash
+kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-qf6gw -- cat /etc/nginx/nginx.conf
+kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-qf6gw -- tail /var/log/nginx/error.log
+```
 
 ### Labs 
 
 ![image-20200806095527275](figures/image-20200806095527275.png)
 
-#### Scenario 1: 1 Ingress Controller, 1 HTTP Ingress, 1 HTTP Service
+#### Scenario 1: HTTP-Ingress-HTTP
 - `helm install svc1 ./svc1/chart`: launch ingress, service and deployment
 - `curl -H 'Host:svc1.xxx.com' http://127.0.0.1:80`
 
-#### Scenario 2: 1 Ingress Controller, 1 HTTP Ingress, 1 HTTPS Service
-- `helm install --name svc2 ./svc2`: launch ingress, service and deployment
+#### Scenario 2: HTTP-Ingress-HTTPS
+- `helm install svc2 ./svc2/chart`: launch ingress, service and deployment
 - `curl -H 'Host:svc2.xxx.com' http://127.0.0.1:80`
 
 #### Scenario 3: 1 Ingress Controller, 1 HTTP Ingress, 1 TCP Service（没测试）

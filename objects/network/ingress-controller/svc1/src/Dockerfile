@@ -19,5 +19,6 @@ COPY --from=builder /build/your-application /app/
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
+
 USER app-runner
 ENTRYPOINT ["/app/your-application"]
