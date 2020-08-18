@@ -79,18 +79,34 @@ kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-q
 
 ### Labs 
 
-![image-20200806095527275](figures/image-20200806095527275.png)
-
 #### Scenario 1: HTTP-Ingress-HTTP
-- `helm install svc1 ./svc1/chart`: launch ingress, service and deployment
+- `kubectl apply -f ./svc1/ingress.yaml`: launch ingress, service and deployment
 - `curl -H 'Host:svc1.xxx.com' http://127.0.0.1:80`
 
 #### Scenario 2: HTTP-Ingress-HTTPS
-- `helm install svc2 ./svc2/chart`: launch ingress, service and deployment
+- `kubectl apply -f ./svc2/ingress.yaml`: launch ingress, service and deployment
 - `curl -H 'Host:svc2.xxx.com' http://127.0.0.1:80`
 
-#### Scenario 3: 1 Ingress Controller, 1 HTTP Ingress, 1 TCP Service（没测试）
-- `helm install --name svc3 ./svc3`: launch ingress, service and deployment
+#### Scenario 3: HTTPS-Ingress-HTTP
+- `kubectl apply -f ./svc1/ingress.yaml`: launch ingress, service and deployment
+- `curl -H 'Host:svc1.xxx.com' http://127.0.0.1:80`
+
+#### Scenario 4: HTTPS-Ingress-HTTPS(ssl-termination)
+```bash
+kubectl create secret tls secret-svc2 --key ./key.pem --cert ./cert.pem --dry-run
+
+```
+- `kubectl apply -f ./svc1/ingress.yaml`: launch ingress, service and deployment
+- `curl -H 'Host:svc1.xxx.com' http://127.0.0.1:80`
+
+#### Scenario 5: HTTPS-Ingress-HTTPS(ssl-passthrough)
+- `kubectl apply -f ./svc1/ingress.yaml`: launch ingress, service and deployment
+- `curl -H 'Host:svc1.xxx.com' http://127.0.0.1:80`
+
+
+
+#### Scenario 3: TCP-Ingress-TCP（没测试）
+- `kubectl apply -f ./svc3/ingress.yaml`: launch ingress, service and deployment
 - `telnet svc3.xxx.com 32700`
 
 #### Scenario 4: 2 Ingress Controller, 6 Ingress (2 HTTP, 2 HTTPS, 2 TCP)（没测试）
@@ -100,6 +116,12 @@ kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-q
 - `curl -H 'Host:svc5.tonybai.com' http://127.0.0.1:32700`
 - `helm install --name svc6 ./svc6`
 - `telnet svc6.tonybai.com 32700`
+
+
+
+
+
+
 
 #### Scenario 5: 1 Ingress Controller, 1 HTTPS Ingress, 1 HTTP Service
 - `kubectl create secret tls ingress-controller-demo-tls-secret --key server.key --cert server.crt`

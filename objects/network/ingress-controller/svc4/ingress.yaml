@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svc4-depployment
+  labels:
+    app: nginx-ingress-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-ingress-demo
+  template:
+    metadata:
+      labels:
+        app: nginx-ingress-demo
+    spec:
+      containers:
+        - name: ct-go-server
+          image: wukongsun/nginx-ingress-demo-svc2:0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc4-cluster-ip
+spec:
+  selector:
+    app: nginx-ingress-demo
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      targetPort: 8080
+      port: 8888
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: svc4-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+spec:
+  tls:
+    - hosts:
+        - svc4.xxx.com
+      secretName: gohttpsdemo-secret
+  rules:
+    - host: svc4.xxx.com
+      http:
+        paths:
+          - backend:
+              serviceName: svc4-cluster-ip
+              servicePort: 8888
