@@ -105,37 +105,9 @@ kubectl create secret tls secret-svc2 --key ./key.pem --cert ./cert.pem --dry-ru
 
 
 
-#### Scenario 3: TCP-Ingress-TCP（没测试）
+#### Scenario 5: TCP-Ingress-TCP（没测试）
 - `kubectl apply -f ./svc3/ingress.yaml`: launch ingress, service and deployment
 - `telnet svc3.xxx.com 32700`
-
-#### Scenario 4: 2 Ingress Controller, 6 Ingress (2 HTTP, 2 HTTPS, 2 TCP)（没测试）
-- `helm install --name svc4 ./svc4`
-- `curl -H 'Host:svc4.tonybai.com' http://127.0.0.1:32700`
-- `helm install --name svc5 ./svc5`
-- `curl -H 'Host:svc5.tonybai.com' http://127.0.0.1:32700`
-- `helm install --name svc6 ./svc6`
-- `telnet svc6.tonybai.com 32700`
-
-
-
-
-
-
-
-#### Scenario 5: 1 Ingress Controller, 1 HTTPS Ingress, 1 HTTP Service
-- `kubectl create secret tls ingress-controller-demo-tls-secret --key server.key --cert server.crt`
-- `helm install --name svc7 ./svc7`
-- `curl -k -H 'Host:svc7.xxx.com' https://127.0.0.1:32701`
-
-#### Scenario 6: 1 Ingress Controller, 1 HTTPS Ingress, 1 HTTPS Service (ssl-termination)
-- `helm install --name svc8 ./svc8`
-- `curl -k -H 'Host:svc8.xxx.com' https://127.0.0.1:32701`
-
-#### Scenario 7: 1 Ingress Controller, 1 HTTPS Ingress, 1 HTTPS Service (ssl-passthrough)
-ssl-passthrough这个无法通过
-- `helm install --name svc9 ./svc9`
-- `curl -k --key ./client.key --cert ./client.crt -H 'Host:svc9.xxx.com' https://127.0.0.1:32701`
 
 
 ## Ref
