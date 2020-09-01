@@ -105,7 +105,7 @@ kubectl create secret tls secret-svc2 --key ./key.pem --cert ./cert.pem --dry-ru
 
 
 
-#### Scenario 5: TCP-Ingress-TCP（没测试）
+#### Scenario 6: TCP-Ingress-TCP（没测试）
 - `kubectl apply -f ./svc3/ingress.yaml`: launch ingress, service and deployment
 - `telnet svc3.xxx.com 32700`
 
