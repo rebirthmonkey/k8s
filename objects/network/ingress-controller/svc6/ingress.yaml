@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svc6-deployment
+  labels:
+    app: nginx-ingress-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-ingress-demo
+  template:
+    metadata:
+      labels:
+        app: nginx-ingress-demo
+    spec:
+      containers:
+        - name: ct-go-server
+          image: wukongsun/nginx-ingress-demo-svc6:0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc6-cluster-ip
+spec:
+  selector:
+    app: nginx-ingress-demo
+  type: ClusterIP
+  ports:
+    - name: tcp
+      port: 8888
+      targetPort: 8080
+      protocol: TCP
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tcp-services
+  namespace: ingress-nginx
+data:
+  8888: "default/svc6-cluster-ip:8888"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-nginx
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+    - name: https
+      port: 443
+      targetPort: 443
+      protocol: TCP
+    - name: tcp-8888
+      port: 8888
+      targetPort: 8888
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx

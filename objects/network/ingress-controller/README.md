@@ -88,26 +88,46 @@ kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-q
 - `curl -H 'Host:svc2.xxx.com' http://127.0.0.1:80`
 
 #### Scenario 3: HTTPS-Ingress-HTTP
+
++ `openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ic3.key -out ic3.crt -subj "/CN=*.xxx.com/O=xxx.com"`:create crt and key
+
++ `kubectl create secret tls secret-tls --key  ic3.key --cert ic3.crt`:create secret
+
 - `kubectl apply -f ./svc1/ingress.yaml`: launch ingress, service and deployment
-- `curl -H 'Host:svc1.xxx.com' http://127.0.0.1:80`
+- `curl -k https//:svc3.xxx.com`
 
 #### Scenario 4: HTTPS-Ingress-HTTPS(ssl-termination)
-```bash
-kubectl create secret tls secret-svc2 --key ./key.pem --cert ./cert.pem --dry-run
 
-```
++ `openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ic3.key -out ic3.crt -subj "/CN=*.xxx.com/O=xxx.com"`:create crt and key
+
++ `kubectl create secret tls secret-tls --key  ic3.key --cert ic3.crt`:create secret
+
 - `kubectl apply -f ./svc1/ingress.yaml`: launch ingress, service and deployment
-- `curl -H 'Host:svc1.xxx.com' http://127.0.0.1:80`
+- `curl -H 'Host:svc4.xxx.com' https://127.0.0.1 -k`
 
 #### Scenario 5: HTTPS-Ingress-HTTPS(ssl-passthrough)
+
++ `openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ic3.key -out ic3.crt -subj "/CN=*.xxx.com/O=xxx.com"`:create crt and key
++ `kubectl create secret tls secret-tls --key  ic3.key --cert ic3.crt`:create secret
++ `--enable-ssl-passthrough`:add this flag to enable ssl passthrough
+
 - `kubectl apply -f ./svc1/ingress.yaml`: launch ingress, service and deployment
-- `curl -H 'Host:svc1.xxx.com' http://127.0.0.1:80`
+- `curl --key ./client.key --cert ./client.crt -H "host:svc5.xxx.com" https://127.0.0.1 -k`
 
+#### Scenario 6: TCP-Ingress-TCP
+- `--tcp-services-configmap=$(POD_NAMESPACE)/tcp-services`:add this flag to support tcp service
 
+- `kubectl apply -f ./svc6/ingress.yaml`: launch configmap, service and deployment
 
-#### Scenario 6: TCP-Ingress-TCP（没测试）
-- `kubectl apply -f ./svc3/ingress.yaml`: launch ingress, service and deployment
-- `telnet svc3.xxx.com 32700`
+- ` netstat -anpt | grep 8888`:check if port is normal
+
+  ```
+  [root@master ~]# netstat -anpt | grep 8888
+  tcp        0      0 0.0.0.0:8888            0.0.0.0:*               LISTEN      45910/nginx: master 
+  tcp6       0      0 :::8888                 :::*                    LISTEN      45910/nginx: master
+  ```
+
+- `telnet svc6.xxx.com 8888`
 
 
 ## Ref
