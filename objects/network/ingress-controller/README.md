@@ -82,37 +82,38 @@ kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-q
 #### Scenario 1: HTTP-Ingress-HTTP
 - `kubectl apply -f ./svc1/ingress.yaml`: launch ingress, service and deployment
 - `curl -H 'Host:svc1.xxx.com' http://127.0.0.1:80`
+- `kubectl delete -f ./svc1/ingress.yaml`
 
 #### Scenario 2: HTTP-Ingress-HTTPS
 - `kubectl apply -f ./svc2/ingress.yaml`: launch ingress, service and deployment
 - `curl -H 'Host:svc2.xxx.com' http://127.0.0.1:80`
+- `kubectl delete -f ./svc2/ingress.yaml`
 
 #### Scenario 3: HTTPS-Ingress-HTTP
+- `openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout svc3/ic.key -out svc3/ic.crt -subj "/CN=*.xxx.com/O=xxx.com"`: create crt and key
+- `kubectl create secret tls secret-tls-svc3 --key svc3/ic.key --cert svc3/ic.crt`: create secret
+- `kubectl apply -f ./svc3/ingress.yaml`: launch ingress, service and deployment
+- `curl -H "Host:svc3.xxx.com" https://127.0.0.1 -k`: curl in secure mode
+- `curl --cert svc3/ic.crt -H "host:svc3.xxx.com" https://127.0.0.1`： doesn't work since the signer isn't authorized
+- `kubectl delete -f ./svc3/ingress.yaml`
+- `kubectl delete secret secret-tls-svc3`
 
-+ `openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ic3.key -out ic3.crt -subj "/CN=*.xxx.com/O=xxx.com"`:create crt and key
-
-+ `kubectl create secret tls secret-tls --key  ic3.key --cert ic3.crt`:create secret
-
-- `kubectl apply -f ./svc1/ingress.yaml`: launch ingress, service and deployment
-- `curl -k https//:svc3.xxx.com`
-
-#### Scenario 4: HTTPS-Ingress-HTTPS(ssl-termination)
-
-+ `openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ic3.key -out ic3.crt -subj "/CN=*.xxx.com/O=xxx.com"`:create crt and key
-
-+ `kubectl create secret tls secret-tls --key  ic3.key --cert ic3.crt`:create secret
-
-- `kubectl apply -f ./svc1/ingress.yaml`: launch ingress, service and deployment
+#### Scenario 4: HTTPS-Ingress-HTTPS (ssl-termination)
+- `openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout svc4/ic.key -out svc4/ic.crt -subj "/CN=*.xxx.com/O=xxx.com"`: create crt and key
+- `kubectl create secret tls secret-tls-svc4 --key svc4/ic.key --cert svc4/ic.crt`: create secret
+- `kubectl apply -f ./svc4/ingress.yaml`: launch ingress, service and deployment
 - `curl -H 'Host:svc4.xxx.com' https://127.0.0.1 -k`
+- `kubectl delete -f ./svc4/ingress.yaml`
+- `kubectl delete secret secret-tls-svc4`
 
-#### Scenario 5: HTTPS-Ingress-HTTPS(ssl-passthrough)
-
-+ `openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ic3.key -out ic3.crt -subj "/CN=*.xxx.com/O=xxx.com"`:create crt and key
-+ `kubectl create secret tls secret-tls --key  ic3.key --cert ic3.crt`:create secret
-+ `--enable-ssl-passthrough`:add this flag to enable ssl passthrough
-
-- `kubectl apply -f ./svc1/ingress.yaml`: launch ingress, service and deployment
-- `curl --key ./client.key --cert ./client.crt -H "host:svc5.xxx.com" https://127.0.0.1 -k`
+#### Scenario 5: HTTPS-Ingress-HTTPS (ssl-passthrough)
+- `openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout svc5/ic.key -out svc5/ic.crt -subj "/CN=*.xxx.com/O=xxx.com"`: create crt and key
+- `kubectl create secret tls secret-tls-svc5 --key svc5/ic.key --cert svc5/ic.crt`: create secret
+- `--enable-ssl-passthrough`: add this flag to enable ssl passthrough in the ingress yaml file
+- `kubectl apply -f ./svc5/ingress.yaml`: launch ingress, service and deployment
+- `curl -H 'Host:svc5.xxx.com' https://127.0.0.1 -k`
+- `kubectl delete -f ./svc5/ingress.yaml`
+- `kubectl delete secret secret-tls-svc5`
 
 #### Scenario 6: TCP-Ingress-TCP
 - `--tcp-services-configmap=$(POD_NAMESPACE)/tcp-services`:add this flag to support tcp service

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"rsc.io/quote"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {

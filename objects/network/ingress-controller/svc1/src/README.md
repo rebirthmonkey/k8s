@@ -2,6 +2,8 @@
 
 ## Build
 ```bash
+go mod init main
+go test
 docker build -t wukongsun/nginx-ingress-demo-svc1:0.1 .
 ```
 

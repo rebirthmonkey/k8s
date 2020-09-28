@@ -46,7 +46,7 @@ spec:
   tls:
     - hosts:
         - svc4.xxx.com
-      secretName: secret-tls
+      secretName: secret-tls-svc4
   rules:
     - host: svc4.xxx.com
       http:
