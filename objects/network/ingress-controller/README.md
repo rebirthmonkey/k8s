@@ -67,7 +67,7 @@ helm install nginx-ingress-controller --namespace kube-system stable/nginx-ingre
 - Check Installation
 ```bash
 helm install svc1 ./svc1/chart
-kubect get ingress -o wide # check if the backend endpoints are bound
+kubectl get ingress -o wide # check if the backend endpoints are bound
 vim /etc/hosts # xxx.com 127.0.0.1
 curl -H 'Host:svc1.xxx.com' 127.0.0.1:80 # check the ingress
 ```
@@ -80,9 +80,10 @@ kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-q
 ### Labs 
 
 #### Scenario 1: HTTP-Ingress-HTTP
-- `kubectl apply -f ./svc1/ingress.yaml`: launch ingress, service and deployment
+- see [here](svc1/src/README.md) to create a docker image
+- `kubectl apply -f svc1/ingress.yaml`: launch ingress, service and deployment
 - `curl -H 'Host:svc1.xxx.com' http://127.0.0.1:80`
-- `kubectl delete -f ./svc1/ingress.yaml`
+- `kubectl delete -f svc1/ingress.yaml`
 
 #### Scenario 2: HTTP-Ingress-HTTPS
 - `kubectl apply -f ./svc2/ingress.yaml`: launch ingress, service and deployment

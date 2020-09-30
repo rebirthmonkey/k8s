@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: svc1-depployment
+  name: svc1-deployment
   labels:
     app: nginx-ingress-demo
 spec:
