@@ -49,6 +49,8 @@ openssl x509 -req -CA ca.crt -CAkey ca.key -CAcreateserial -in server.csr -out s
 
 ## Build Image
 ```bash
+go mod init main
+go test
 docker build -t wukongsun/nginx-ingress-demo-svc2:0.1 .
 ```
 
