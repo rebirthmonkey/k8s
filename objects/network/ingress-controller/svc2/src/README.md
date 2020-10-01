@@ -47,10 +47,15 @@ openssl req -new -key server.key -out server.csr # 服务器端在申请签名�
 openssl x509 -req -CA ca.crt -CAkey ca.key -CAcreateserial -in server.csr -out server.crt # 向自己的 CA 机构申请证书，签名过程需要 CA 的证书和私钥参与，最终颁发一个带有 CA 签名的证书 
 ```
 
+## Test Code
+```bash
+go run main.go
+curl -k https://localhost:8080 # in another terminal
+```
+
 ## Build Image
 ```bash
 go mod init main
-go test
 docker build -t wukongsun/nginx-ingress-demo-svc2:0.1 .
 ```
 

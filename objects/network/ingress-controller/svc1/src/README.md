@@ -1,9 +1,13 @@
 # svc1
+## Test Code
+```bash
+go run main.go
+curl http://localhost:8080 # in another terminal
+```
 
 ## Build
 ```bash
 go mod init main
-go test
 docker build -t wukongsun/nginx-ingress-demo-svc1:0.1 .
 ```
 

@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: service-dep-node-port
   labels:
-    app: nginx
+    app: go-server
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: nginx
+      app: go-server
   template:
     metadata:
       labels:
-        app: nginx
+        app: go-server
     spec:
       containers:
         - name: ct-go-server
@@ -27,7 +27,7 @@ metadata:
   name: service-node-port
 spec:
   selector:
-    app: nginx
+    app: go-server
   type: NodePort
   ports:
     - protocol: TCP

@@ -80,12 +80,13 @@ kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-q
 ### Labs 
 
 #### Scenario 1: HTTP-Ingress-HTTP
-- see [here](svc1/src/README.md) to create a docker image
+- see [here](svc1/src/README.md) to create the svc1 docker image
 - `kubectl apply -f svc1/ingress.yaml`: launch ingress, service and deployment
 - `curl -H 'Host:svc1.xxx.com' http://127.0.0.1:80`
 - `kubectl delete -f svc1/ingress.yaml`
 
 #### Scenario 2: HTTP-Ingress-HTTPS
+- see [here](svc2/src/README.md) to create the svc2 docker image
 - `kubectl apply -f ./svc2/ingress.yaml`: launch ingress, service and deployment
 - `curl -H 'Host:svc2.xxx.com' http://127.0.0.1:80`
 - `kubectl delete -f ./svc2/ingress.yaml`
@@ -115,21 +116,6 @@ kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-q
 - `curl -H 'Host:svc5.xxx.com' https://127.0.0.1 -k`
 - `kubectl delete -f ./svc5/ingress.yaml`
 - `kubectl delete secret secret-tls-svc5`
-
-#### Scenario 6: TCP-Ingress-TCP
-- `--tcp-services-configmap=$(POD_NAMESPACE)/tcp-services`:add this flag to support tcp service
-
-- `kubectl apply -f ./svc6/ingress.yaml`: launch configmap, service and deployment
-
-- ` netstat -anpt | grep 8888`:check if port is normal
-
-  ```
-  [root@master ~]# netstat -anpt | grep 8888
-  tcp        0      0 0.0.0.0:8888            0.0.0.0:*               LISTEN      45910/nginx: master 
-  tcp6       0      0 :::8888                 :::*                    LISTEN      45910/nginx: master
-  ```
-
-- `telnet svc6.xxx.com 8888`
 
 
 ## Ref
