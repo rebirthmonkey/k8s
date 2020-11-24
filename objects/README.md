@@ -16,26 +16,26 @@ k8s API对象的定义大多可以分为Metadata和Spec两个部分。前者存�
   - Annotations：携带key-value格式的内部信息，被k8s本身使用。多数Annotations都是自动被k8s加上的。
 - spec：自定义数据
 
-```yaml
+``` yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
-	name: nginx-deployment
+  name: nginx-deployment
 spec: 
-	selector: 
-		matchLabels: 
-			app: nginx 
-	replicas: 2 
-	template: 
-		metadata: 
-			labels: 
-				app: nginx 
-		spec: 
-			containers: 
-			- name: nginx 
-				image: nginx:1.7.9 
-				ports: 
-				- containerPort: 80
+  selector: 
+    matchLabels: 
+      app: nginx 
+  replicas: 2 
+  template: 
+    metadata: 
+      labels: 
+        app: nginx 
+    spec: 
+      containers: 
+      - name: nginx 
+        image: nginx:1.7.9 
+        ports: 
+        - containerPort: 80
 ```
 
 ## Object Resources

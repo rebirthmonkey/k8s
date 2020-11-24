@@ -5,7 +5,7 @@ metadata:
   labels:
     app: wordpress
 spec:
-  storageClassName: standard
+  storageClassName: wordpress-standard
   accessModes:
     - ReadWriteOnce
   resources:
