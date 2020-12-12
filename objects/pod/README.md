@@ -204,7 +204,7 @@ It cannot be managed by the API server, so it cannot be managed by ReplicationCo
 - `kubectl get pods`: 通过查看发现liveness-exec的RESTARTS在10秒后由于检测到不健康一直在重启
 
 ### Pod with Liveness HTTP Check
-- `kubectl apply -f pod5-liveness-http.yaml`: `k8s.gcr.io/liveness`镜像会使`/healthz`服务时好时坏
+- `kubectl apply -f pod5-liveness-http.yaml`: `k8s.gcr.io/liveness`镜像会使`/healthz`服务时好时坏，如果`k8s.gcr.io/liveness`无法国内下载可以更改`pod5-liveness-http.yaml`中`k8s.gcr.io/liveness`为`mirrorgooglecontainers/liveness`
 - `kubectl get pods`
 - `curl 192.168.2.19:8080/healthz`
 
@@ -232,5 +232,5 @@ It cannot be managed by the API server, so it cannot be managed by ReplicationCo
 - `kubectl get pod`：看到有删除该pod，但是是骗人的
 
 ## Debug
-Some students may find that they cannot ping "pod1_id". If it happens, you may try to add "--vm-driver=none" after the code "minikube start", this term means you would like run k8s on your VM(for example in the Ubuntu of your Virtualbox). Otherwise "minikube" will run on the virtual machine of your Ubuntu, only when you use "minikube ssh" to enter the virtual machine of Ubuntu then you can ping the pod1. You can choose one of these way to achieve the goal.
+1. Some students may find that they cannot ping "pod1_id". If it happens, you may try to add "--vm-driver=none" after the code "minikube start", this term means you would like run k8s on your VM(for example in the Ubuntu of your Virtualbox). Otherwise "minikube" will run on the virtual machine of your Ubuntu, only when you use "minikube ssh" to enter the virtual machine of Ubuntu then you can ping the pod1. You can choose one of these way to achieve the goal.
 
