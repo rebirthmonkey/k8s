@@ -124,6 +124,8 @@ kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-q
 - `kubectl delete -f ./svc5/ingress.yaml`
 - `kubectl delete secret secret-tls-svc5`
 
+## Debug
+You may face some problems when using "helm repo add", then  you can try changing the source https://blog.csdn.net/u014089832/article/details/108593291
 
 ## Ref
 - [实践kubernetes ingress controller的四个例子](https://tonybai.com/2018/06/21/kubernetes-ingress-controller-practice-using-four-examples/)
