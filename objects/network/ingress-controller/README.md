@@ -64,6 +64,13 @@ spec:
 ```bash
 helm install nginx-ingress-controller --namespace kube-system stable/nginx-ingress # ingress controller安装在localhost的80和443端口
 ```
+### Another Installation(if the upper one doesn't work)
+Download "ingress-nginx.yaml" in https://github.com/yundd/kubernetes/tree/master/k8s_install/ingress
+Then 
+```bash
+kubectl apply -f ingress-nginx.yaml
+```
+
 - Check Installation
 ```bash
 helm install svc1 ./svc1/chart
@@ -117,6 +124,8 @@ kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-q
 - `kubectl delete -f ./svc5/ingress.yaml`
 - `kubectl delete secret secret-tls-svc5`
 
+## Debug
+You may face some problems when using "helm repo add", then  you can try changing the source https://blog.csdn.net/u014089832/article/details/108593291
 
 ## Ref
 - [实践kubernetes ingress controller的四个例子](https://tonybai.com/2018/06/21/kubernetes-ingress-controller-practice-using-four-examples/)
