@@ -231,3 +231,6 @@ It cannot be managed by the API server, so it cannot be managed by ReplicationCo
 - `kubectl delete pod pod8-static`
 - `kubectl get pod`：看到有删除该pod，但是是骗人的
 
+## Debug
+Some students may find that they cannot ping "pod1_id". If it happens, you may try to add "--vm-driver=none" after the code "minikube start", this term means you would like run k8s on your VM(for example in the Ubuntu of your Virtualbox). Otherwise "minikube" will run on the virtual machine of your Ubuntu, only when you use "minikube ssh" to enter the virtual machine of Ubuntu then you can ping the pod1. You can choose one of these way to achieve the goal.
+
