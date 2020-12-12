@@ -213,7 +213,7 @@ It cannot be managed by the API server, so it cannot be managed by ReplicationCo
 - `kubectl apply -f pod6-liveness-tcp.yaml`
 - `kubectl get pods`
 
-### Pod with NodeSelector
+### Pod with NodeSelector(Our TP is on a single node, you can skip this part)
 - `kubectl label nodes node01 disktype=ssd`
 - `kubectl get nodes node01 --show-labels`
 - `kubectl apply -f pod7-nodeSelector.yaml`
