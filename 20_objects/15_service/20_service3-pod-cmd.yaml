@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-service3
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: demo
+      image: nginx:latest
+      imagePullPolicy: IfNotPresent
+

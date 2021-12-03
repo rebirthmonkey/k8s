@@ -1,11 +1,18 @@
-# Docker & K8s Tutorial
+# Docker & K8s
 
-## Container Tutorial
+## Installation
 
-- [Container Tutorial](container/README.md)
+- [Installation](01_installation/README.md)
 
-## K8s Tutorial
+## Container
 
-- [Installation](installation/README.md)
-- [API Objects](objects/README.md)
-- [Labs](lab/README.md)
+- [Container Tutorial](10_container/README.md)
+
+## K8s
+
+- [API Objects](20_objects/README.md)
+- [k8s Architecture & Components](30_components/README.md)
+- [Helm Chart](50_charts/README.md)
+- [CRD Operator](60_operator/README.md)  
+- [Lab](90_lab/README.md)
+

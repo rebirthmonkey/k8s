@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job3
+spec:
+  completions: 10
+  parallelism: 2 
+  template:
+    metadata:
+      name: busyboxplus
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: ct-busyboxplus
+          image: radial/busyboxplus
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c", "echo hello"]
+
