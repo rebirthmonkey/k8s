@@ -1,18 +1,18 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: vol1-emptydir
+  name: vol1-pod-emptydir
 spec:
-  restartPolicy: Never
   volumes:
   - name: vol-data
     emptyDir: {}
 
+  restartPolicy: Never
   containers:
   - name: ct-busybox
-    image: busybox
+    image: busybox:latest
     imagePullPolicy: IfNotPresent
     volumeMounts:
     - name: vol-data
       mountPath: /data
-    command: ['/bin/sh', '-c', 'sleep 3000']
+    command: ["/bin/sh", "-c", "echo yyy > /data/xxx & sleep 3000"]

@@ -8,3 +8,22 @@ spec:
   resources:
     requests:
       storage: 1Gi
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: storage-pvc-sc
+spec:
+  volumes:
+    - name: data-vol
+      persistentVolumeClaim:
+        claimName: storage-sc
+  containers:
+    - name: busybox-pvc-sc
+      image: busybox
+      command: ["/bin/sh", "-c", "sleep 60000"]
+      volumeMounts:
+        - name: data-vol
+          mountPath: /usr/share/busybox
+          readOnly: false

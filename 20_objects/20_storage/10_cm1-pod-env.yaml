@@ -1,13 +1,22 @@
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm1
+data:
+  special.how: very
+  special.type: charm
+
+---
+
+apiVersion: v1
 kind: Pod
 metadata:
-  name: cm6-pod-env
+  name: cm1-pod-env
 spec:
   restartPolicy: Never
   containers:
-    - name: ct-busybox
-      image: radial/busyboxplus
-      imagePullPolicy: IfNotPresent
+    - name: ct-debian
+      image: debian:latest
       command: [ "/bin/sh", "-c", "env && sleep 3000" ]
       env:
         - name: SPECIAL_LEVEL_KEY

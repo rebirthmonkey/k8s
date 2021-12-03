@@ -20,10 +20,8 @@ k8s的网络模型如下：
 hostPort相当于`docker run -p 30890:80`，为容器在主机上做个NAT映射，不用创建svc，因此端口只在容器运行的vm上监听。但是其缺点是无法负载多pod，具体实例见[pod1-host-port.yaml](pod1-host-port.yaml)
 
 ```bash
-curl localhost:30890
+curl localhost:3089
 ```
-
-
 
 #### hostNetwork（Pod-Level）
 

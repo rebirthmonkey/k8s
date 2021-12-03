@@ -1,20 +1,20 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: vol2-hostpath
+  name: vol2-pod-hostpath
 spec:
-  restartPolicy: Never
   volumes:
   - name: vol-data
     hostPath:
-      path: /tmp
+      path: /Users/ruan/workspace/k8s/20_objects/20_storage
       type: Directory
 
+  restartPolicy: Never
   containers:
   - name: ct-busybox
-    image: busybox
+    image: busybox:latest
     imagePullPolicy: IfNotPresent
     volumeMounts:
     - name: vol-data
       mountPath: /data
-    command: ['/bin/sh', '-c', 'sleep 3000']
+    command: ["/bin/sh", "-c", "ls /data & sleep 3000"]

@@ -83,7 +83,7 @@ kubectl rollout history deployment deployment1 --revision=1
 kubectl rollout undo deployment deployment1 --to-revision=1
 ```
 
-#### HPA
+#### HPA(tmp)
 The **metric-server** should be installed.
 
 ```shell

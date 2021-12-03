@@ -5,7 +5,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: manual      # 该名称将用于将PersistentVolumeClaim请求绑定到此
+  storageClassName: manual # 该名称将用于将 PVC 请求绑定到此
   capacity:
     storage: 1Gi
   accessModes:

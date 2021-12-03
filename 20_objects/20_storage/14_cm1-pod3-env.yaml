@@ -1,13 +1,14 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: cm1-pod-env
+  name: cm1-pod3-env
 spec:
   restartPolicy: Never
   containers:
-    - name: ct-debian
-      image: debian
-      command: [ "/bin/sh", "-c", "env && sleep 3000" ]
+    - name: ct-busybox
+      image: radial/busyboxplus:latest
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh", "-c", "env && sleep 3000"]
       env:
         - name: SPECIAL_LEVEL_KEY
           valueFrom:
