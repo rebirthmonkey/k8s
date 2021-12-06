@@ -105,7 +105,7 @@ kubectl -n kube-system get pod
   - `minikube start --memory 3072`: start minikube
   - `minikube dashboard`: check
 - [minikube](minikube/README.md)
-- [helm](../50_charts/README.md)
+- [helm](../50_helm/README.md)
 
 
 ## Configuration

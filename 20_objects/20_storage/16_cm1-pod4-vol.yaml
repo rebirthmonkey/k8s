@@ -3,6 +3,11 @@ kind: Pod
 metadata:
   name: cm1-pod4-vol
 spec:
+  volumes:
+    - name: config-vol
+      configMap:
+        name: cm1
+
   restartPolicy: Never
   containers:
     - name: ct-busybox
@@ -12,7 +17,3 @@ spec:
       volumeMounts:
       - name: config-vol
         mountPath: /etc/config
-  volumes:
-    - name: config-vol
-      configMap:
-        name: cm1

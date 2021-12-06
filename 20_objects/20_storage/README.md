@@ -148,11 +148,24 @@ kubectl apply -f 42_pvc1-pod.yaml # create a PVC which will bound to the PV1, an
 kubuctl exec pvc1-pod -- ls /data
 ```
 
-#### Storage Class(tmp)
-- `kubectl create -f sc.yaml`: create a default storage class
-- `kubectl create -f pvc-sc.yaml`: create a PVC
-- `kubectl create -f pod-pvc-sc.yaml`: create a pod using the PVC
-- `kubectl exec -it storage-pvc-sc -- /bin/sh`: access to the pod and test the storage
+#### Storage Class
+
+上面介绍的 PV 和 PVC 模式需要运维人员先创建好 PV，然后开发人员定义 PVC 进行一一 Bond。但是如果 PVC 请求成千上万，那么就需要创建成千上万的 PV，对于运维人员来说维护成本很高。K8s 提供一种自动创建 PV 的机制，叫 StorageClass，它的作用就是创建 PV 的模板。
+
+具体来说，StorageClass 会定义一下两部分：
+
+1. PV 的属性 ：比如存储的大小、类型等；
+2. 创建这种 PV 需要用到的存储插件：比如 Ceph 等；
+
+有了这两部分信息，K8s 就能根据用户提交的 PVC 找到对应的 StorageClass，然后 K8s 就会调用 StorageClass 声明的存储插件创建需要的 PV。
+
+这里我们以NFS为例，要使用NFS，我们就需要一个nfs-client的自动装载程序，我们称之为Provisioner，这个程序会使用我们已经配置好的NFS服务器自动创建持久卷，也就是自动帮我们创建PV。
+
+```shell
+kubectl apply -f 50_sc1-hostpath.yaml # create a default storage class
+kubectl apply -f 52_sc1-pvc-pod.yaml # create a PVC and a pod
+kubectl exec -it storage-pvc-sc -- /bin/sh # access to the pod and test the storage
+```
 
 ## Third-party Drivers
 
