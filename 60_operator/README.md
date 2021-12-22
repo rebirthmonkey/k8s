@@ -2,7 +2,7 @@
 
 ## 简介
 
-Operator 框架 = 自定义 CRD + 自定义 Controller
+Operator 框架 = 自定义 CRD + 自定义 Controller + Admission
 
 Operator 是一种 K8s 的扩展形式，可以帮助用户以 K8s 的声明式 API 风格自定义来管理应用及服务，Operator 已经成为分布式应用在 K8s 集群部署的事实标准。
 
