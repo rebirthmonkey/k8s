@@ -1,6 +1,6 @@
 # rootfs
 
-  ## 简介
+## 简介
 
 从文件隔离的角度，希望新建容器进程看到的文件系统就是一个独立的隔离环境，而不是继承自宿主机的文件系统。在 Linux 里有个 chroot 命令，它的作用就是“change root file system”，即改变进程的根目录到指定的位置。因为容器就是一个进程，所以可以通过 chroot 给容器进程提供一个新的根目录及新的文件系统。为了能够让容器的根目录看起来更像一个真实的操作系统，一般会在该容器启动的时候在其根目录下挂载一个完整操作系统的文件系统，比如 Ubuntu16.04 的 ISO。这样在容器启动之后，在容器内执行`ls /`就可以查看到整个根目录下的内容，也就是 Ubuntu 16.04 的所有目录和文件。
 
@@ -8,29 +8,27 @@
 
 正是由于 rootfs 的存在，容器才**有了运行环境的一致性**。由于 rootfs 里打包的不只是应用，而是整个操作系统的文件和目录，因此应用以及其所需依赖都被封装在了一起。有了容器镜像“打包操作系统”的能力，应用的依赖环境也终于变成了应用沙盒的一部分。这就赋予了容器所谓的一致性：无论在本地、云端，还是在任何一台宿主机上，只需要解压打包好的容器镜像，那么这个应用运行所需要的完整的执行环境就可以被重现。这种深入到操作系统级别的运行环境一致性，打通了应用在本地开发和远端执行环境之间难以逾越的鸿沟。
 
-  ## UnionFS/aufs
+## UnionFS/aufs
 
  Docker 镜像的制作并没有沿用以前制作 rootfs 的标准流程，而是在镜像的设计过程中引入了层（layer）的概念。用户制作镜像的每一步操作，都会生成一个层，整个文件系统增量机制是基于 UnionnFS 的能力。UnionFS 是 Linux 内核中的一项技术，它将多个不同位置的目录联合挂载到同一个目录下。而 Docker 就是利用这种联合挂载的能力，将容器镜像里的多层内容呈现为统一的 rootfs。Docker 中使用到的 UnionFS 的实现是 aufs，虽然 aufs 还未进入 Linux 内核主干，但是在 Ubuntu、Debain 等发行版上均有使用。
 
-  ### 镜像分层
+### 镜像分层
 
-  <img src="../figures/image-20200125085810167-0174994.png" alt="image-20200125085810167" style="zoom:33%;" />
+![image-20200125085810167](../figures/image-20200125085810167.png)
 
-  以Docker为例，其镜像主要分为3层：
+以Docker为例，其镜像主要分为3层：
 
-  - 只读层：容器的 rootfs 最下面的五层，以增量的方式分别包含了整个文件系统。
-  - 读写层：容器的 rootfs 最上面的一层，在没有写入文件之前，这个目录是空的。而一旦在容器里做了写操作，修改产生的内容就会以增量的方式出现在这个层中。可读写层的作用就是专门用来存放修改 rootfs 后产生的增量，无论是增、删、改。当使用完了这个被修改过的容器之后，还可以使用 docker commit 和 push 指令保存这个被修改过的可读写层。而与此同时，原先的只读层里的内容则不会有任何变化，这就是增量 rootfs 的好处。
-  - init 层：Docker/k8s 单独生成的一个内部层，专门用来存放/etc/hosts、/etc/resolv.conf 等配置信息。这些文件本来属于只读层，但是在启动容器时**每次都会**会自动写入一些指定的参数，比如 hostname，所以理论上需要在可读写层对它们进行修改。但这些修改往往只对当前的容器有效，并不希望执行 docker commit 时，把这些信息连同可读写层一起提交，所以设置了额外的 init 层，init 层的内容在 docker commit 时会被忽略。
+- 只读层：容器的 rootfs 最下面的五层，以增量的方式分别包含了整个文件系统。
+- 读写层：容器的 rootfs 最上面的一层，在没有写入文件之前，这个目录是空的。而一旦在容器里做了写操作，修改产生的内容就会以增量的方式出现在这个层中。可读写层的作用就是专门用来存放修改 rootfs 后产生的增量，无论是增、删、改。当使用完了这个被修改过的容器之后，还可以使用 docker commit 和 push 指令保存这个被修改过的可读写层。而与此同时，原先的只读层里的内容则不会有任何变化，这就是增量 rootfs 的好处。
+- init 层：Docker/k8s 单独生成的一个内部层，专门用来存放/etc/hosts、/etc/resolv.conf 等配置信息。这些文件本来属于只读层，但是在启动容器时**每次都会**会自动写入一些指定的参数，比如 hostname，所以理论上需要在可读写层对它们进行修改。但这些修改往往只对当前的容器有效，并不希望执行 docker commit 时，把这些信息连同可读写层一起提交，所以设置了额外的 init 层，init 层的内容在 docker commit 时会被忽略。
 
-  ## 总结
+## 总结
 
 由于容器镜像的操作是增量式的，每次镜像拉取、推送的内容，比原本多个完整的 VM 要小得多。只读共享层的存在可以使得所有这些容器镜像需要的总空间，也比每个镜像的总和要小。这样也使得基于容器镜像的协作，要比基于动则几个 GB 的 VM 磁盘镜像的协作要敏捷得多。
 
 更重要的是，一旦镜像被发布，任何环境使用这个镜像启动的容器都完全一致，可以完全复现镜像制作者当初的完整环境，这也就是容器技术“强一致性”的重要体现。基于 aufs 的容器镜像的发明，不仅打通了“开发 - 测试 - 部署”流程的每一个环节，更重要的是：容器镜像将会成为未来软件的主流发布方式。
 
-
 ## Lab
-
 
 ### Docker aufs原理
 
@@ -44,19 +42,56 @@
 
 ### aufs Lab
 
+首先，我们创建一个测试用目录并切换到该目录
+
+```shell
+mkdir test-aufs && cd test-aufs
+```
+
+我们用以下命令创建一个层次的目录
+
+```shell
+$ mkdir aufs-mnt container-layer image-layer-high image-layer-low
+$ echo "x.txt from image layer high." > image-layer-high/x.txt
+$ echo "I am image layer high" > image-layer-high/image-layer-high.txt
+$ echo "x.txt from image layer low." > image-layer-low/x.txt
+$ echo "I am image layer low" > image-layer-low/image-layer-low.txt
+```
+
+当我们使用`tree`命令检查该目录时，应该得到如下结果
+
+```shell
+$ tree .
+.
+├── aufs-mnt
+├── container-layer
+├── image-layer-high
+│   ├── image-layer-high.txt
+│   └── x.txt
+└── image-layer-low
+    ├── image-layer-low.txt
+    └── x.txt
+
+4 directories, 4 files
+```
+
+> 在Debian/Ubuntu发行版上，`tree`命令可以用过`sudo apt-get install tree`安装
+
 - 上层覆盖下层
 
 ```bash
 $ grep aufs /proc/filesystems
 nodev aufs
 $ tree .
-|-- aufs-mnt
-|-- container-layer
-|-- image-layer-high
-| |-- image-layer-high.txt
-| `-- x.txt
-`-- image-layer-low
-|-- image-layer-low.txt `-- x.txt
+.
+├── aufs-mnt
+├── container-layer
+├── image-layer-high
+│   ├── image-layer-high.txt
+│   └── x.txt
+└── image-layer-low
+    ├── image-layer-low.txt
+    └── x.txt
 $ mount -t aufs -o dirs=./container-layer:./image-layer-high:./image-layer-low none ./aufs-mnt
 $ mount -t aufs
 none on /data/xxx/test/aufs-mnt type aufs (rw,relatime,si=e7b69dd2200efd9f)
@@ -67,6 +102,9 @@ image-layer-high.txt image-layer-low.txt x.txt
 $ cat /data/xxx/test/aufs-mnt/x.txt
 x.txt from image layer high.
 ```
+
+> `/data/xxx/test/`为测试目录的绝对路径，即`$(pwd)`
+> `si_e7b69dd2200efd9f`为aufss生成的SI，需要替换成实际生成的值
 
 - 新增读写层
 
@@ -107,8 +145,12 @@ $ ls -a /data/xxx/test/container-layer/.wh.image-layer-high.txt
 /data/xxx/test/container-layer/.wh.image-layer-high.txt
 ```
 
+- 通过umount卸载文件系统
+
+```bash
+$ umount ./aufs-mnt
+```
+
 - 总结
 
-![image-20200202121527484](/Users/ruan/workspace/k8s/container/figures/image-20200202121527484.png)
-
-
+![image-20200202121527484](../figures/image-20200202121527484.png)
