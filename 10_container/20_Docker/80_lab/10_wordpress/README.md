@@ -1,5 +1,7 @@
 # WordPress
+
 In order to deploy a *wordpress* application, we should:
+
 - create 1 network
 - create 2 volumes
   - 1 for mysql
@@ -7,8 +9,8 @@ In order to deploy a *wordpress* application, we should:
 - launch the *mysql* container
 - launch the *wordpress* container
 
-
 ## Docker Deployment
+
 Network Creation
 
 ```shell
@@ -45,14 +47,16 @@ mysql:5.7
 ```
 
 Launch the Container Wordpress
+
 ```shell
 docker run --name wordpress -d --rm \
---net wordpress -p 8090:80 --link wordpressdb:mysql \
--e WORDPRESS_DB_PASSWORD=P@ssw0rd \
+--net wordpress -p 8090:80 \
+-e WORDPRESS_DB_PASSWORD=P@ssw0rd -v wordpress:/var/www/html \
 wordpress:4.9.6
 ```
 
 Check
+
 ```shell
 curl http://localhost:8090 # through a browser
 ```

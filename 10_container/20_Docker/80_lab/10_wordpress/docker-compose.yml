@@ -4,7 +4,7 @@ services:
   mysql:
     image: mysql:5.7
     volumes:
-       - mysql:/var/lib/mysql
+       - db:/var/lib/mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: P@ssw0rd
@@ -19,6 +19,9 @@ services:
     restart: always
     environment:
       WORDPRESS_DB_PASSWORD: P@ssw0rd
+    volumes:
+      - wordpress:/var/www/html
 
 volumes:
-    mysql:
+    db:
+    wordpress:

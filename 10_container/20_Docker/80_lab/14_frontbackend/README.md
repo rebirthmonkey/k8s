@@ -24,6 +24,10 @@ Check
 
 ```shell
 curl localhost:6666 # type twice
-# modify the `backend/input.txt` file
+```
+
+modify the file `backend:/data/input.txt`, check the server again
+
+```shell
 curl localhost:6666 #  type twice to see the update
 ```

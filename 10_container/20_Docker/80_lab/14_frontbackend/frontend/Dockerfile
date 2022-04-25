@@ -1,7 +1,7 @@
-FROM ubuntu:xenial
+FROM ubuntu:focal
 
 RUN apt update && \
-    apt install -y nodejs-legacy
+    apt install -y nodejs
 
 COPY . /data
 WORKDIR /data
