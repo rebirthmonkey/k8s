@@ -1,4 +1,5 @@
-FROM ubuntu:xenial
+FROM ubuntu:focal
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 RUN apt update && \
     apt install -y apache2 libapache2-mod-php
