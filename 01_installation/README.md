@@ -1,4 +1,5 @@
 # 安装配置
+
 ## Installation
 
 ### Docker-for-Desktop
@@ -28,7 +29,6 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
 
-
 #### No-Root Configuration
 
 ```shell
@@ -39,7 +39,7 @@ sudo usermod -aG docker $USER
 
 #### Chinese Docker Repo Mirrors
 
-(Skip)
+The mirror url is stored in `/etc/docker/daemon.json`. Open it with text editors, for example `vi`
 
 ```bash
 sudo vi /etc/docker/daemon.json
@@ -60,6 +60,7 @@ systemctl daemon-reload
 systemctl restart docker
 ```
 
+> You should run these commands as root or with `sudo`
 
 #### Test
 
@@ -73,7 +74,7 @@ docker run hello-world
 
 ##### Failed to start Docker Application Container Engine
 
-Cannot load hosts in configuration json file when starting docker daemon【1】
+Cannot load hosts in configuration json file when starting docker daemon \[1\]
 
 ```shell
 vim /lib/systemd/system/docker.service
@@ -83,13 +84,15 @@ ExecStart=/usr/bin/dockerd
 
 ### kubectl
 
-Reference: https://kubernetes.io/docs/tasks/tools/install-kubectl/
+```shell
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install ./kubectl /usr/local/bin/ # Use install command to replace move
+```
+
+#### Auto-completion
 
 ```shell
-curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
-chmod +x ./kubectl
-sudo mv ./kubectl /usr/local/bin/kubectl
-echo "source <(kubectl completion bash)" >> ~/.bashrc`: auto-completion in bashrc
+echo 'source <(kubectl completion bash)' >>~/.bashrc
 ```
 
 Check Status
@@ -102,15 +105,17 @@ kubectl -n kube-system get pod
 ### Others
 
 - [kubeadm](kubeadm/README.md)
-  - `minikube start --memory 3072`: start minikube
+  - `minikube start --memory 3072`: start minikube with memory limit
   - `minikube dashboard`: check
 - [minikube](minikube/README.md)
 - [helm](../50_helm/README.md)
 
-
 ## Configuration
+
 ### Auto-completion
+
 #### MacOS
+
 More details can be find [here](https://www.e-learn.cn/content/qita/2054926).
 
 ```shell
@@ -138,6 +143,7 @@ brew info bash-completion
   ```
 
 ### Context
+
 context in k8s is configuration setting of 1 cluster
 
 ```shell

@@ -1,14 +1,14 @@
-## minikube
+# minikube
 
 minikube is a single-node (VM) cluster
 
-### Installation
+## Installation
 
 Here is the documentation for the installation:
-https://kubernetes.io/docs/tasks/tools/install-minikube/
+[https://kubernetes.io/docs/tasks/tools/install-minikube/](https://kubernetes.io/docs/tasks/tools/install-minikube/)
 
 Installation in China:
-https://my.oschina.net/u/228832/blog/3079150
+[https://my.oschina.net/u/228832/blog/3079150](https://kubernetes.io/docs/tasks/tools/install-minikube/)
 
 The following part is for macOS
 
