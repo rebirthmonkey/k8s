@@ -1,4 +1,5 @@
 # Volume
+
 ## Introduction
 
 Docker 中的 volume 机制允许你将宿主机上指定的目录或者文件，挂载到容器里面进行读取和修改操作。
@@ -37,7 +38,6 @@ Docker 中的 volume 机制允许你将宿主机上指定的目录或者文件�
 
 第三种是在host的内存中通过tmpfs创建一个volume。因为数据存储在内存中，所以无法做持久化存储，同时也无法通过``docker volume``进行管理，只能作为临时数据的存储。
 
-
 ## Manipulation
 
 ### Basics
@@ -50,6 +50,8 @@ docker volume create VOL_ID # create
 
 ### Mount Volume
 
+使用`-v` 参数可以挂载volume
+
 ```shell
 docker run -d -p 80:80 -v VOL_ID:/usr/local/apache2/htdocs httpd
 docker run -d -p 80:80 -v /usr/local/apache2/htdocs httpd # a random volume will be created in `/var/lib/docker/volumes/VOL_ID/_data`
@@ -57,23 +59,29 @@ echo "xxx" > /var/lib/docker/volumes/VOL_ID/_data
 ```
 
 ### Bind Mount
+
 Mount host dir to container volume
 
 ```shell
-docker run -it --rm -v VOL_ID:path ubuntu:xenial # attach a volume to a container
+docker run -it --rm -v VOL_ID:path ubuntu:focal # attach a volume to a container
 docker run ... -v $(pwd):path... # sync local dir to the container
 docker run ... -v $(pwd):path:rw ... # setup *rw* permission for the volume
 docker run ... -v $(pwd):path:ro ... # setup *ro* permission for the volume
 ```
 
+> 如果要挂载Host路径，则提供的路径必须是绝对路径。
+
+> 可以使用`$(pwd)` 获取当前终端路径，例如`$(pwd)/data`与`./data`的作用是一样的
+
 ## Lab
 
 ```shell
 docker volume create vol1
-docker run -it --rm -v vol1:/data ubuntu:xenial /bin/bash
+docker run -it --rm -v vol1:/data ubuntu:focal /bin/bash
 ```
 
 in the container
+
 ```bash
 ls /data # check the path in the container
 touch /data/xxx
@@ -81,7 +89,8 @@ echo yyy > /data/xxx
 ```
 
 in another terminal
+
 ```shell
-docker run -it --rm -v vol1:/data ubuntu:xenial /bin/bash`
+docker run -it --rm -v vol1:/data ubuntu:focal /bin/bash
 cat /data/xxx # check the previously created `xxx` file and its content
 ```

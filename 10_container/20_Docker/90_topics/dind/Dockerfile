@@ -5,7 +5,8 @@ RUN yum update -y \
     && yum clean all
 
 RUN mkdir -p /data && groupadd docker
-Add ["./files/docker.tar.xz", "/usr/local/bin/"]
+ADD ["./files/docker.tar.xz", "/usr/local/bin/"]
 COPY ["./scripts/init.sh", "/data/init.sh"]
+RUN chmod +x /data/init.sh
 
 CMD ["/data/init.sh"]

@@ -10,13 +10,25 @@ cgroup技术就是把系统中所有进程组织成一颗进程树，进程树�
 
 - 列出所有cgroup的subsystem
 
-```bash
+```shell
 $ lssubsys –m
+```
+
+> 可能需要安装cgroup-tools
+>
+>```shell
+># debian/ubuntu
+>sudo apt-get install cgroup-tools
+>```
+
+输出：
+
+```text
 cpuset /sys/fs/cgroup/cpuset cpu,cpuacct /sys/fs/cgroup/cpu,cpuacct memory /sys/fs/cgroup/memory devices /sys/fs/cgroup/devices
 freezer /sys/fs/cgroup/freezer
 net_cls /sys/fs/cgroup/net_cls
 blkio /sys/fs/cgroup/blkio
-hugetlb /sys/fs/cgroup/hugetlb	
+hugetlb /sys/fs/cgroup/hugetlb
 ```
 
 - 限制CPU
@@ -31,7 +43,8 @@ $ while :; do :; done &
 [2] 1759
 
 $ top -p 1759
-PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND 1759 root 20 0 10956 1064 376 R 100.0 0.0 0:28.85 bash
+PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND
+1759 root 20 0 10956 1064 376 R 100.0 0.0 0:28.85 bash
 
 $ cat /sys/fs/cgroup/cpu/mytest/cpu.cfs_period_us
 100000
@@ -49,14 +62,19 @@ $ cat /sys/fs/cgroup/cpu/mytest/tasks
 1759
 
 $ top –p 1759
-PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND 1759 root 20 0 10956 1064 376 R 30.0 0.0 5:40.76 bash
+PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND 
+1759 root 20 0 10956 1064 376 R 30.0 0.0 5:40.76 bash
 ```
+
+> `echo 30000 > /sys/fs/cgroup/cpu/mytest/cpu.cfs_quota_us`这条命令可能会遇到权限问题，可以用 `echo 30000 | sudo tee /sys/fs/cgroup/cpu/test/cpu.cfs_quota_us`替代
+
+> 可以用`while :; do :; done & echo $! > test.pid && cat test.pid` 将进程的PID保存在`test.pid`中，然后用`$(cat test.pid)`在命令中调用
 
 - 限制磁盘I/O
 
 ```bash
 $ dd if=/dev/sda1 of=/dev/null
-# iotop查看
+$ iotop # iotop查看
 TID PRIO USER DISK READ DISK WRITE SWAPIN IO> COMMAND
 8128 be/4 root 55.74 M/s 0.00 B/s 0.00 % 85.65 % dd if=/de~=/dev/null...
 $ mkdir /sys/fs/cgroup/blkio/mytest
@@ -66,4 +84,22 @@ TID PRIO USER DISK READ DISK WRITE SWAPIN IO> COMMAND
 8128 be/4 root 973.20 K/s 0.00 B/s 0.00 % 94.41 % dd if=/de~=/dev/null...
 ```
 
+> `/dev/sda1`是需要读取的设备名称，必须存在（不同平台可能不同）
 
+> `echo 8128 > /sys/fs/cgroup/blkio/mytest/tasks` 中，8128是进程的PID，需要修改
+
+> `echo '8:0 1048576' > /sys/fs/cgroup/blkio/mytest/blkio.throttle.read_bps_device` 中，`8:0`对应主设备号和副设备号，可以通过`ls -l /dev/sda1`查看，`1048576`意味着速度被限制在1MiB/s
+
+> 可能需要安装`iotop`
+
+```shell
+$ sudo apt-get install iotop
+```
+
+实验结束，删除cgroup，结束进程
+
+```shell
+$ sudo cgdelete cpu:mytest
+$ sudo cgdelete blkio:mytest
+$ kill -9 1759
+```

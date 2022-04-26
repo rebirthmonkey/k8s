@@ -1,8 +1,9 @@
 # Dockerfile
+
 Dockerfile specifies all the configurations to build an image.
 
-
 ## Syntax
+
 - `FROM`: base image，设置基础镜像为 Debian
 - `LABEL`: 来给 image 添加 metadata，是 key-value 键值对的形式。
 
@@ -30,7 +31,7 @@ Dockerfile specifies all the configurations to build an image.
   - `RUN ["/bin/bash", "-c", "echo hello"]`
 - `CMD`: 启动容器时会执行的命令。command to be run when launch the container。CMD 与 RUN不同，RUN 是在 build 镜像过程中执行的命令，而 CMD 在 build 时不会执行任何命令，而是在容器启动时（镜像创建的容器）执行。
 
-  - if there are multiple CMD, only the last will be run 
+  - if there are multiple CMD, only the last will be run
 - `ENTRYPOINT`: docker run 命令的参数会被添加到 ENTRYPOINT 中的所有元素之后，并覆盖 CMD 命令。如果不填 ENTRYPOINT，默认用`/bin/bash -c`代替
 
   - always run even if add another NEW_CMD
@@ -45,12 +46,12 @@ Dockerfile specifies all the configurations to build an image.
 
 ## Lab
 
-
 ### Build Image
+
 - `docker image build` create a new image using the instructions in the Dockerfile
-  - `docker image build -t apache2-demo:v1 .`: `-t` stands for tag/name 
+  - `docker image build -t apache2-demo:v1 .`: `-t` stands for tag/name
   - `docker image build -t apache2-demo:v1 -f DockerfileXXX .`: `-f` use a Dockerfile with an arbitrary name
-- `docker image history apache2-demo`: show image build history 
+- `docker image history apache2-demo`: show image build history
 
 ### Shell Env
 
@@ -77,6 +78,7 @@ docker run --name ct2 --rm -v $(pwd):/workspace -e APP=/workspace/app2.py img1 #
 ```
 
 ### Apache2 Web Server
+
 - write a Dockerfile to create an image with packages php, apache (apache2, libapache2-mod-php)
 - add a index.php file with: `<?php phpinfo() ?>`
 
@@ -88,9 +90,8 @@ docker run -d -p 8885:80 apache2-demo
 http://localhost:8885/index.php # test NAT access through browser
 ```
 
-
+> 安装镜像时可能会出现要求输入时区的情况，导致安装失败。需要在Dockerfile中添加`RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime`来设定当前时区为上海
 
 ## Ref
 
 1. [Dockerfile文件万字全面解析](https://www.toutiao.com/i6865085292726977035/?tt_from=weixin&utm_campaign=client_share&wxshare_count=1&timestamp=1598448076&app=news_article&utm_source=weixin&utm_medium=toutiao_ios&use_new_style=1&req_id=202008262121160100180820431714AAB2&group_id=6865085292726977035)
-

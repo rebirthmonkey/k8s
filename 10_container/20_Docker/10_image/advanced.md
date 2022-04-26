@@ -8,13 +8,13 @@
 
 - `vi /usr/lib/systemd/system/docker.service`: 使docker pull支持http insecure registry协议
 
-  ```
+  ```ini
   ExecStart=/usr/bin/dockerd --insecure-registry 127.0.0.1:38008
   ```
 
 - `vi /etc/docker/daemon.json`
 
-  ```
+  ```json
   {
     "registry-mirrors": ["https://10.123.97.147"],  
     "max-concurrent-downloads": 6,
