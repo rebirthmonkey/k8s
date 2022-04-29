@@ -38,7 +38,8 @@ $ ls /sys/fs/cgroup/cpu/mytest
 ls: cannot access /sys/fs/cgroup/cpu/mytest: No such file or directory
 
 $ cgcreate -g cpu:mytest
-$ ls /sys/fs/cgroup/cpu/mytest cpu.cfs_quota_us cpu.cfs_period_us tasks
+$ ls /sys/fs/cgroup/cpu/mytest 
+cpu.cfs_quota_us cpu.cfs_period_us tasks
 $ while :; do :; done &
 [2] 1759
 

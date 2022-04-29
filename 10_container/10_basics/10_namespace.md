@@ -18,13 +18,12 @@ Namespace是Linux用来隔离系统资源的方式，它使得PID、IPC、Networ
 
 Namespace的实现需要两个部分：每个子系统的namespace结构，将此前所有的“全局”系统包装到namepsace中；将给定进程关联到所属各个namespace的机制。
 
-![image-20200122102301349](../figures/image-20200117094641114.png)
+<img src="../figures/image-20200117094641114.png" alt="image-20200122102301349" style="zoom: 33%;" />
 
 系统此前的全局属性现在封装到namespace中，每个进程关联到一个选定的namespace。struct nsproxy用于汇集指向特定于namespace的指针：
 
 ```c++
 struct nsproxy {
-
         atomic_t count; 
         struct uts_namespace *uts_ns; 
         struct ipc_namespace *ipc_ns; 

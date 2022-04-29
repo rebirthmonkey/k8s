@@ -65,6 +65,8 @@ $ ls -l /proc/22865/ns/net
 
 <img src="figures/image-20200202153831519.png" alt="image-20200202153831519" style="zoom: 25%;" />
 
+## Inter-Host Network
+
 ### overlay
 
 Docker原生的跨主机通信模型，核心是Linux网桥与vxlan隧道，并且通过KV系统（consul、etcd）同步路由信息。
