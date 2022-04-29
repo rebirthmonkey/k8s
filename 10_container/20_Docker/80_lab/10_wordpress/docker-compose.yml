@@ -3,6 +3,7 @@ version: '3.3'
 services:
   mysql:
     image: mysql:5.7
+    container_name: wordpressdb
     volumes:
        - db:/var/lib/mysql
     restart: always
@@ -13,11 +14,13 @@ services:
   wordpress:
     depends_on:
        - mysql
-    image: wordpress:4.9.6
+    image: wordpress:5.9.3
+    container_name: wordpress
     ports:
-      - 8091:80
+      - 8090:80
     restart: always
     environment:
+      WORDPRESS_DB_HOST: wordpressdb
       WORDPRESS_DB_PASSWORD: P@ssw0rd
     volumes:
       - wordpress:/var/www/html

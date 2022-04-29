@@ -31,3 +31,7 @@ modify the file `backend:/data/input.txt`, check the server again
 ```shell
 curl localhost:6666 #  type twice to see the update
 ```
+
+## Q: 为什么需要Check两次server？
+
+A: 这是因为在`frontend_server.js`中，向后端发起的请求是异步的。因此，每当用户curl前端，前端首先向后端发起一个请求以获取一个更新后的input.txt，并在回调函数中将其保存在`body_data`变量中。随后，前端立即返回一个`body_data`当前的值，此时请求尚未完成，因此前端返回一个较旧的数据.wo
