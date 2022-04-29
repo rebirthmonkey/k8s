@@ -2,7 +2,7 @@
 
 ## Conception
 
-<img src="./figures/docker-architecture.png" alt="Docker Main Components" style="zoom: 50%;" />
+<img src="./figures/docker-architecture.png" alt="Docker Main Components" style="zoom: 67%;" />
 
 - Docker client: send commands
 - Docker Daemon: server to handle requests
@@ -38,8 +38,4 @@ docker -H 192.168.88.8 info # example (no need to do)
 
 ## Lab
 - [Lab](80_lab/README.md)
-
-
-## Advanced Topics
-- [Advanced Topics](90_topics/README.md)
 

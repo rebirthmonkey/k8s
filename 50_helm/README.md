@@ -117,7 +117,7 @@ show databases;
 
 ```shell
 helm install my-mongodb stable/mongodb
-uninstall my-mongodb
+helm uninstall my-mongodb
 ```
 
 - 获取密码

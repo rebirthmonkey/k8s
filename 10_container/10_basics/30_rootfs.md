@@ -14,7 +14,7 @@
 
 ### 镜像分层
 
-![image-20200125085810167](../figures/image-20200125085810167.png)
+<img src="../figures/image-20200125085810167.png" alt="image-20200125085810167" style="zoom: 50%;" />
 
 以Docker为例，其镜像主要分为3层：
 
@@ -153,4 +153,4 @@ $ umount ./aufs-mnt
 
 - 总结
 
-![image-20200202121527484](../figures/image-20200202121527484.png)
+<img src="../figures/image-20200202121527484.png" alt="image-20200202121527484" style="zoom: 33%;" />
