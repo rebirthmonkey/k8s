@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ct-go-server
-          image: wukongsun/nginx-ingress-demo-svc2:0.1
+          image: nginx-ingress-demo-svc2:0.1  # Replace with your image
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -35,7 +35,7 @@ spec:
       port: 8888
 
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: svc2-ingress
@@ -47,6 +47,10 @@ spec:
     - host: svc2.xxx.com
       http:
         paths:
-          - backend:
-              serviceName: svc2-cluster-ip
-              servicePort: 8888
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: svc2-cluster-ip
+                port: 
+                  number: 8888

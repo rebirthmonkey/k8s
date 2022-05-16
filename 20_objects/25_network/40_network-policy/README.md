@@ -8,11 +8,11 @@
 
 ### ingress
 
-
+TODO
 
 ### egress
 
-
+TODO
 
 ### 范围
 
@@ -20,5 +20,4 @@
 - namespaceSelector
 - podSelector
 
-
-
+TODO
