@@ -4,6 +4,7 @@ metadata:
   name: service5-endpoints  # should be the same as the service name
 subsets:
   - addresses:
-    - ip: 127.0.0.1
+    - ip: 127.0.0.1 # Or you can point it to an external service
+    # Warning: deploy with ip=127.0.0.1 on a multi-node cluster will cause error, change it to a valid address (e.g node IP)
     ports:
-    - port: 80
+    - port: 8000
