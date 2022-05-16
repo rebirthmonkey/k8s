@@ -1,4 +1,5 @@
 # API Objects
+
 ## Introduction
 
 API 对象是 K8s 集群中的管理操作单元。K8s集群系统每支持一项新功能、引入一项新技术，一定会新引入对应的 API 对象，支持对该功能的管理操作。例如副本集 Replica Set 对应的 API 对象是 RS。
@@ -46,3 +47,7 @@ spec:
 - [Storage including Volume, Persistent Volume/ PVC, ConfigMap, Secret](20_storage/README.md)
 - [Network including Ingress](25_network/README.md)
 - [Label & Annotation](03_label&annotation/README.md)
+
+## Tips
+
+`kubectl delete -f <NAME>.yaml`可以删除由`kubectl apply -f <NAME>.yaml`应用的配置

@@ -30,8 +30,6 @@ Namespace 是一组对资源和对象的抽象集合，可以用来将系统内�
 > wget https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.6/components.yaml
 > kubectl apply -f components.yaml
 
-!!! note
-
 > 如果遇到metrics-server容器Running而无法Ready，容器日志中出现X509错误，则需要启用serverTLSBootstrap. 参考[官方文档](https://kubernetes.io/zh/docs/reference/command-line-tools-reference/kubelet-tls-bootstrapping/)
 
 > 也可以在`components.yaml`文件下的`template.containers.args`下添加`--kubelet-insecure-tls`参数忽略证书错误，然后再次运行`kubectl apply -f components.yaml`
