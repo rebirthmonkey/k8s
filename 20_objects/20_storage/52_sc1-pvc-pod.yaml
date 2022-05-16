@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: storage-sc
 spec:
+  storageClassName: hostpath2
   accessModes:
     - ReadWriteOnce
   resources:
