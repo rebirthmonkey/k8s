@@ -1,4 +1,5 @@
 # kubelet
+
 kubelet是k8s这样一个容器编排与管理系统跟容器打交道的主要“场所”。
 
 处理master下发给本节点（node）的任务，管理本节点pod及其中的container。
@@ -6,8 +7,6 @@ kubelet是k8s这样一个容器编排与管理系统跟容器打交道的主要�
 - 在`API Server`上注册本node信息
 - 通过`API Server`监听所有针对pod的操作，并做相关如创建、删除CT等的操作
 - 通过cAdvisor监控container和node资源，并定期向master汇报资源使用情况
-
-
 
 ## 工作原理
 
@@ -37,10 +36,3 @@ CRI可分为两组：
 CNCF/Docker的cri-containerd提供一个典型的CRI shim的能力，它将k8s发出的CRI请求转换成对containerd的调用，然后创建出 runC 容器。runC负责执行设置容器Namespace、Cgroups 和 chroot 等基础操作的组件。
 
 ![image-20200201112048614](figures/image-20200201112048614.png)
-
-
-
-
-
-
-

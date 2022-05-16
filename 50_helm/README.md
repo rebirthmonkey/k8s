@@ -1,4 +1,5 @@
 # Helm
+
 ## Introduction
 
 helm 是 k8s 的一个项目，相当于 Linux 的 yum。在 yum 仓库中，yum 不光要解决包之间的依赖关系，还要提供具体的程序包。helm 仓库里面只有配置清单文件而没有镜像，镜像还是由镜像仓库来提供，如 hub.docker.com、私有仓库。helm 提供了一个应用所需要的所有清单文件。例如一个 nginx，需要一个 deployment 清单文件、一个 service 清单文件、一个 hpa 的清单文件，把这 3 个文件打包到一起就是一个应用的程序包，称之为 Chart。Chart 是一个 helm 程序包，其实质只是一个模板，可以对这个模板进行赋值（value），形成自定义的清单文件。Helm 把 K8s 资源打包到一个 chart 中，而 chart 被保存到 chart 仓库，通过 chart 仓库可用来存储和分享 chart。
@@ -11,13 +12,16 @@ helm 是 k8s 的一个项目，相当于 Linux 的 yum。在 yum 仓库中，yum
 - repository：chart 的仓库，用于发布和存储 chart。
 
 ### chart 包
+
 每个chart包含下面两部分：
-- Chart.yaml：描述本chart的基本信息，如名称版本等 
+
+- Chart.yaml：描述本chart的基本信息，如名称版本等
 - values.yaml：chart配置的默认值
 - templates：存放k8s manifest文件模板的目录，模板使用chart配置的值生成k8s manifest（yaml）文件
 - charts：本chart需要依赖的其他chart
 
 ### Helm2 架构
+
 - 客户端bin：通过gRPC连接到服务器端Tiller
 - 服务器端Tiller：用来调用k8s api-server
 
@@ -45,7 +49,9 @@ Helm3 最明显的变化是删除了 Tiller
 ### Installation
 
 #### Helm2
+
 版本: v2.9.1
+
 - `cd /data`
 - `wget http://openstack.oa.com/tshift/helm-v2.9.1-linux-amd64.tar.gz`: download Helm client
 - `docker pull docker-registry.tshift-test.oa.com/tiller:v2.9.1`: download Helm Tiller
@@ -94,8 +100,8 @@ echo $MYSQL_ROOT_PASSWORD
 
 ```shell
 kubectl run --rm -i --tty ubuntu --image=ubuntu:16.04 --restart=Never -- bash -il
-- `apt-get update && apt-get install mysql-client -y`
--	`mysql -h my-mysql -p`
+[pod] $ apt-get update && apt-get install mysql-client -y
+[pod] $ mysql -h my-mysql -p
 ```
 
 - 本地客户端接入: Docker-for-Desktop 可用
@@ -165,8 +171,8 @@ export REDIS_PASSWORD=$(kubectl get secret --namespace default my-redis -o jsonp
 
 ```shell
 kubectl run --namespace default my-redis-client --rm --tty -i --restart='Never' --env REDIS_PASSWORD=$REDIS_PASSWORD --image docker.io/bitnami/redis:5.0.7-debian-10-r32 -- bash
--	`redis-cli -h my-redis-master -a $REDIS_PASSWORD` # read/write operation
--	`redis-cli -h my-redis-slave -a $REDIS_PASSWORD` # read-only operation
+[pod] $redis-cli -h my-redis-master -a $REDIS_PASSWORD # read/write operation
+[pod] $redis-cli -h my-redis-slave -a $REDIS_PASSWORD # read-only operation
 ```
 
 - 本地客户端接入: Docker-for-Desktop 可用
@@ -241,8 +247,6 @@ export POD_NAME=$(kubectl get pods --namespace default -l "app=elasticsearch,com
 kubectl port-forward --namespace default $POD_NAME 9200:9200 &
 echo "URL: http://127.0.0.1:9200/"
 ```
-
-
 
 ## Custom Charts
 

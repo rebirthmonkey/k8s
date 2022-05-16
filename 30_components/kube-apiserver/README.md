@@ -1,4 +1,5 @@
 # kube-apiserver
+
 ## List-Watch
 
 Etcd 存储集群的数据信息，而 Apiserver 作为统一入口，任何对数据的操作都必须经过 Apiserver。客户端（如kubelet、scheduler、controller-manager）通过 list-watch 监听Apiserver 中的资源（如 pod、rs、rc 等）的 create、update和 delete 事件，并针对事件类型调用相应的事件处理函数。
@@ -51,7 +52,7 @@ kube-apiserver把收到的REST request转发到某个node的kubelet的REST端口
 - Authentication：
 
   - 最严格的HTTPS证书认证，基于CA根证书签名的双向数字证书 认证方式
-  - HTTP Token认证：通过一个Token来识别合法用户 
+  - HTTP Token认证：通过一个Token来识别合法用户
   - Http Base认证：通过用户名+密码的方式认证
 - Authorization：API Server授权，包括AlwayDeny、AlwaAllow、ABAC、RBAC、WebHook
 - Admission Control：k8s AC体系中的最后一道关卡，官方标准的Adminssion Control就有10个，在启动kube-apiserver时指定
@@ -70,13 +71,9 @@ APIServer Aggregator的设计思路是允许用户编写一个自定义的 APISe
 
 ![image-20200201143831501](figures/image-20200201143831501.png)
 
-
-
-
-
 ## URL
+
 - `kubectl proxy --port=8080`: create a local proxy for the local `kubelet` `API server`
 - `curl 127.0.0.1:8080/api`
 - `curl 127.0.0.1:8080/api/v1`
 - `curl 127.0.0.1:8080/api/v1/pods`
-

@@ -1,29 +1,29 @@
 # Kubernetes/k8s
 
 ## Operation
-- [Operation](operations/README.md)
 
+- [Operation](60_operator/README.md)
 
 ## Container
-- [Container](container/README.md)
 
+- [Container](10_container/README.md)
 
 ## k8s Objects
-- [k8s Concepts](objects/README.md)
 
+- [k8s Concepts](20_objects/README.md)
 
 ## Architecture & Components
-- [k8s Architecture & Components](components/README.md)
 
+- [k8s Architecture & Components](30_components/README.md)
 
 ## Extensions & Add-ons
-- [k8s Extensions and Add-ons](extensions/README.md)
 
+- [k8s Extensions and Add-ons](50_helm/README.md)
 
 ## Exercises
-- [Exercises](lab/README.md)
 
+- [Exercises](90_lab/README.md)
 
 ## Tools
-- [Helm](installation/helm/README.md)
 
+- [Helm](01_installation/helm/README.md)

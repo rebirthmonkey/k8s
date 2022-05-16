@@ -189,25 +189,23 @@ operator-sdk create api --group cache --version v1alpha1 --kind Memcached --reso
 
 CRD: api/v1alpha1/memcached_types.go
 
-- Size: 
-- Nodes: 
+- Size:
+- Nodes:
 
 ```go
 // MemcachedSpec defines the desired state of Memcached
 type MemcachedSpec struct {
-	//+kubebuilder:validation:Minimum=0
-	// Size is the size of the memcached deployment
-	Size int32 `json:"size"`
+    //+kubebuilder:validation:Minimum=0
+    // Size is the size of the memcached deployment
+    Size int32 `json:"size"`
 }
 
 // MemcachedStatus defines the observed state of Memcached
 type MemcachedStatus struct {
-	// Nodes are the names of the memcached pods
-	Nodes []string `json:"nodes"`
+    // Nodes are the names of the memcached pods
+    Nodes []string `json:"nodes"`
 }
 ```
-
-
 
 - Maker: //+kubebuilder:subresource:status
 
@@ -215,11 +213,10 @@ type MemcachedStatus struct {
 // Memcached is the Schema for the memcacheds API
 //+kubebuilder:subresource:status
 type Memcached struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
-
-	Spec   MemcachedSpec   `json:"spec,omitempty"`
-	Status MemcachedStatus `json:"status,omitempty"`
+    metav1.TypeMeta   `json:",inline"`
+    metav1.ObjectMeta `json:"metadata,omitempty"`
+    Spec   MemcachedSpec   `json:"spec,omitempty"`
+    Status MemcachedStatus `json:"status,omitempty"`
 }
 ```
 
@@ -237,7 +234,7 @@ make manifests
 
 #### 编写 Controller
 
-创建好 CRD 后就需要编写 controllers/memcached_controller.go 
+创建好 CRD 后就需要编写 controllers/memcached_controller.go
 
 ##### SetupWithManager()
 
@@ -328,13 +325,7 @@ kubectl delete -f config/samples/cache_v1alpha1_memcached.yaml
 make undeploy
 ```
 
-
-
-
-
 ## Ref
 
 1. [云原生应用实现规范 - 初识 Operator](https://mp.weixin.qq.com/s/MveSspUcFFWSum1m_XtRlg)
-1. [十分钟弄懂 k8s Operator 应用的制作流程](https://zhuanlan.zhihu.com/p/246550722)
-1. 
-
+2. [十分钟弄懂 k8s Operator 应用的制作流程](https://zhuanlan.zhihu.com/p/246550722)
