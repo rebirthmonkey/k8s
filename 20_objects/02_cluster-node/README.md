@@ -1,19 +1,22 @@
 # Cluster & Node
+
 ## Cluster
+
 ### Terminology
+
 - cluster: 1 or 3 master + n nodes
 - master: a VM or a physical machine which coordinates the cluster
 - node/worker: a VM or a physical machine which serves as a worker that runs applications
 - namespace: virtual cluster for resource isolation
 
 ### Port
+
 - pod port
   - containerPort: Docker image/container's exposed port
 - service port
   - targetPort: *pod's containerPort*
-  - port: service's port, clusterIP's port. If not specified, use the same as targetPort 
+  - port: service's port, clusterIP's port. If not specified, use the same as targetPort
   - nodePort: node's exposed port for the service
-
 
 ## Node
 
@@ -32,7 +35,6 @@ Node包括以下信息：
 - System Info：内核版本、容器引擎版本、OS类型等
 - Allocable（可分配资源）：node上可用的资源，包括CPU、内存、Pod总数
 
-
 ### CMD
 
 - `kubectl cluster-info`
@@ -42,12 +44,17 @@ Node包括以下信息：
 
 ## Taint & Toleration
 
-- taint：只有key=value的pod才会被调度到该node上，其他的pod一律不能被调度
+**Taint：**只有key=value的pod才会被调度到该node上，其他的pod一律不能被调度
 
   - NoSchedule：仅影响调度过程，对现存的Pod对象不产生影响；但容忍的pod同时也能够被分配到集群中的其它节点
   - NoExecute：既影响调度过程，也影响现在的Pod对象；不容忍的Pod对象将被驱逐
   - PreferNoSchedule：NoSchedule的柔性版本，最好别调度过来，实在没地方运行调过来也行
-- toleration：针对taint，用于让pod被调度到之前taint key=value的node上
+
+**Toleration：**针对taint，用于让pod被调度到之前taint key=value的node上
+
+也可以创建yaml配置文件，然后使用`kubectl apply -f taint.yaml`应用。
+
+K8S中master节点十分的关键，因此我们一般不将Pod调度到master上。默认，master被打上了污点，器等价于`kubectl taint nodes master node-role.kubernetes.io/master=:NoSchedule`。因此如果要将Pod调度到master上，必须添加以下配置
 
 ```yaml
   tolerations:
@@ -66,6 +73,8 @@ kubectl taint node docker-desktop node-role.kubernetes.io/master- # untaint
 kubectl apply -f 20_taint-pod.yaml
 ```
 
+> `NODE_NAME`要替换成实际的node名称
+
 ## Cordon & Drain
 
 设置某个节点为维护模式，不让其他 pod 调度上来
@@ -73,7 +82,10 @@ kubectl apply -f 20_taint-pod.yaml
 ```bash
 kubectl cordon NODE_NAME
 kubectl get nodes
-kubectl drain NODE_ID --ignore-daemonsets # 平滑迁移pod
-kubectl uncordon NODE_ID # 取消节点的维护模式
+kubectl drain NODE_NAME --ignore-daemonsets # 平滑迁移pod
+kubectl uncordon NODE_NAME # 取消节点的维护模式
 ```
 
+> `NODE_NAME`要替换成实际的node名称
+
+> `--ignore-daemonsets` 是为了防止和网络有关的Pod被调走
