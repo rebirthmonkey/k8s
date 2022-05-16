@@ -84,6 +84,8 @@ ExecStart=/usr/bin/dockerd
 
 ### kubectl
 
+kubectl是用于控制K8S集群的工具。kubectl并不承担运行集群的工作。集群的运行是有K8S套件中的容器/虚拟机完成的
+
 ```shell
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 sudo install ./kubectl /usr/local/bin/ # Use install command to replace move
