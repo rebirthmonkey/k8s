@@ -38,11 +38,11 @@ docker image inspect mysql:5.7
 Launch the Container MySQL
 
 ```shell
-docker run --name wordpressdb -d --rm \
---net wordpress \
+docker run --name wordpressdb -d --rm \ # name可以随便取
+--net wordpress \ # 连接到wordpress网络
 -v mysql:/var/lib/mysql \
 -e MYSQL_ROOT_PASSWORD=P@ssw0rd \
--e MYSQL_DATABASE=wordpress \
+-e MYSQL_DATABASE=wordpress \ # 必须是wordpress
 mysql:5.7
 ```
 
@@ -50,9 +50,12 @@ Launch the Container Wordpress
 
 ```shell
 docker run --name wordpress -d --rm \
---net wordpress -p 8090:80 \
--e WORDPRESS_DB_PASSWORD=P@ssw0rd -v wordpress:/var/www/html \
-wordpress:4.9.6
+--net wordpress \ # 连接到wordpress网络
+-p 8090:80 \ # 端口映射，宿主机8090->容器80
+-e WORDPRESS_DB_PASSWORD=P@ssw0rd \ # 这里要和前面保持一致
+-e WORDPRESS_DB_HOST=wordpressdb \ # 这里要和前面保持一致
+-v wordpress:/var/www/html \
+wordpress:5.9.3
 ```
 
 Check

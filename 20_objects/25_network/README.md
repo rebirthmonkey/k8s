@@ -4,7 +4,7 @@
 
 ### 网络模型
 
-k8s的网络模型如下：
+k8s的网络模型特点如下：
 
 - IP-per-Pod：
   - 每个 Pod 都拥有一个独立 IP 地址
@@ -14,10 +14,10 @@ k8s的网络模型如下：
   - 所有容器之间无需 NAT 就可以直接互相访问
   - 所有 Node 和所有容器之间无需 NAT 就可以直接互相访问
   - 容器自己看到的 IP 跟其他容器看到的一样
+  
 - 内网分离：
   - Service cluster IP 实现 LB，尽可在集群内部访问
   - 外部请求需要通过 NodePort、LoadBalance 或者 Ingress 来访问
-
 
 ## 网络类型
 
@@ -59,9 +59,8 @@ curl 127.0.0.1:30888 # Docker-Desktop works!
 kubectl apply -f 22_service2-external-ip.yaml
 ```
 
+> 需要修改`22_service2-external-ip.yaml`，设置正确的节点IP
+
 ## Ingress Controller
 
 - [Ingress Controller](30_ingress/README.md)
-
-
-

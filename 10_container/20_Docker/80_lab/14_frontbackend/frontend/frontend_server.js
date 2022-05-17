@@ -35,4 +35,4 @@ http.createServer(function (request, response) {
     response.end(body_data);
 }).listen(vm1_port);
 
-console.log('Frontend Server running' + vm1_port.toString());
+console.log('Frontend Server running ' + vm1_port.toString());

@@ -1,6 +1,7 @@
 # svc2
 
 ## Keys & Certificate Generation
+
 ### 服务器端公钥、私钥
 
 ```bash
@@ -48,24 +49,28 @@ openssl x509 -req -CA ca.crt -CAkey ca.key -CAcreateserial -in server.csr -out s
 ```
 
 ## Test Code
+
 ```bash
 go run main.go
 curl -k https://localhost:8080 # in another terminal
 ```
 
 ## Build Image
+
 ```bash
 go mod init main
 docker build -t wukongsun/nginx-ingress-demo-svc4:0.1 .
 ```
 
 ## Docker Test
+
 ```bash
 docker run -d -p 30888:8080 wukongsun/nginx-ingress-demo-svc4:0.1
 curl -k https://localhost:30888
 ```
 
 ## ks8 Test
+
 ```bash
 kubectl apply -f service-node-port.yaml
 curl -k https://localhost:30888

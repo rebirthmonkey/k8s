@@ -9,7 +9,7 @@ spec:
     - name: liveness
       image: busybox:latest
       imagePullPolicy: IfNotPresent
-      command: ['sh', '-c', 'touch /tmp/healthy; sleep 10; rm -rf /tmp/healthy; sleep 10']
+      command: ['sh', '-c', 'touch /tmp/healthy; sleep 20; rm -rf /tmp/healthy; sleep 20']
       livenessProbe:
         exec:
           command: ['sh', '-c', 'cat /tmp/healthy']

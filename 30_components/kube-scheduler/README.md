@@ -1,4 +1,5 @@
 # kube-scheduler
+
 kube-scheduler的作用是根据待调度pod列表、可用node列表、以及调度算法/策略，将待调度pod绑定到某个合适的node上（将pod的spec.nodeName字段填上调度结果的节点名字），并将绑定信息写入etcd。
 
 ## 调度原理
@@ -14,7 +15,7 @@ Predicates 在调度过程中的作用，可以理解为 Filter，即：它按�
 
 当开始调度一个 Pod 时，scheduler会同时启动 16 个 Goroutine，来并发地为集群里的所有 Node 计算 Predicates，最后返回可以运行这个 Pod 的宿主机列表。每个 Node 执行 Predicates 会按照固定的顺序来进行执行不同的调度策略，其中的策略包括：GeneralPredicates、与 Volume 相关的过滤规则、宿主机相关的过滤规则、Pod 相关的过滤规则。
 
-- **NoDiskConflict**：检查在此主机上是否存在卷冲突。如果这个主机已经挂载了卷，其它使用这个卷的Pod不能调度到这个主机上。GCE 、Amazon EBS 和 Ceph RBD 使用的规则如下: 
+- **NoDiskConflict**：检查在此主机上是否存在卷冲突。如果这个主机已经挂载了卷，其它使用这个卷的Pod不能调度到这个主机上。GCE 、Amazon EBS 和 Ceph RBD 使用的规则如下:
   1. GCE 允许同时挂载多个卷，只要这些卷都是只读的。
   2. Amazon EBS 不允许不同的 Pod 挂载同一个卷。
   3. Ceph RBD 不允许任何两个 pods 分享相同的 monitor，match pool 和 image。
@@ -50,7 +51,7 @@ finalScoreNode = (weight1 * priorityFunc1) + (weight2 * priorityFunc2) + … + (
 
 - **SelectorSpreadPriority :** 对于属于同一个  service、replication controller 的 Pod，尽量分散在不同的主机上。如果指定了区域，则会尽量把 Pod  分散在不同区域的不同主机上。调度一个 Pod 的时候，先查找 Pod 对于的 service或者 replication  controller，然后查找 service 或 replication controller 中已存在的 Pod，主机上运行的已存在的  Pod 越少，主机的打分越高。
 - **LeastRequestedPriority :** 如果新的 pod  要分配一个节点，这个节点的优先级就由节点空闲的那部分与总容量的比值(（总容量-节点上pod的容量总和-新pod的容量）/总容量）来决定。CPU 和 memory 权重相当，比值最大的节点的得分最高。需要注意的是，这个优先级函数起到了按照资源消耗来跨节点分配 pods 的作用。计算公式如下：
-  cpu((capacity – sum(requested)) * 10 / capacity) + memory((capacity – sum(requested)) * 10 / capacity) / 2
+  cpu((capacity – sum(requested)) \* 10 / capacity) + memory((capacity – sum(requested)) \* 10 / capacity) / 2
 - **BalancedResourceAllocation :** 尽量选择在部署 Pod  后各项资源更均衡的机器。BalancedResourceAllocation不能单独使用，而且必须和  LeastRequestedPriority 同时使用，它分别计算主机上的 cpu 和 memory 的比重，主机的分值由 cpu 比重和  memory 比重的“距离”决定。计算公式如下：score = 10 – abs(cpuFraction-memoryFraction)*10
 - **NodeAffinityPriority :** k8s 调度中的亲和性机制。Node Selectors（调度时将 pod 限定在指定节点上），支持多种操作符（In、 NotIn、 Exists、DoesNotExist、  Gt、 Lt），而不限于对节点 labels 的精确匹配。另外，Kubernetes 支持两种类型的选择器，一种是 “hard（requiredDuringSchedulingIgnoredDuringExecution）”选择器，它保证所选的主机满足所有Pod对主机的规则要求。这种选择器更像是之前的 nodeselector，在 nodeselector  的基础上增加了更合适的表现语法。另一种 “soft（preferresDuringSchedulingIgnoredDuringExecution）”  选择器，它作为对调度器的提示，调度器会尽量但不保证满足 NodeSelector 的所有要求。
 - **InterPodAffinityPriority :** 通过迭代 weightedPodAffinityTerm 的元素计算和，并且如果对该节点满足相应的PodAffinityTerm，则将 “weight” 加到和中，具有最高和的节点是最优选的。
@@ -62,5 +63,4 @@ finalScoreNode = (weight1 * priorityFunc1) + (weight2 * priorityFunc2) + … + (
 - **ImageLocalityPriority :** 据主机上是否已具备 Pod  运行的环境来打分。ImageLocalityPriority 会判断主机上是否已存在 Pod  运行所需的镜像，根据已有镜像的大小返回一个0-10的打分。如果主机上不存在 Pod  所需的镜像，返回0；如果主机上存在部分所需镜像，则根据这些镜像的大小来决定分值，镜像越大，打分就越高。
 - **EqualPriority :** EqualPriority 是一个优先级函数，它给予所有节点一个相等的权重。
 - **ServiceSpreadingPriority :** 作用与 SelectorSpreadPriority 相同，已经被 SelectorSpreadPriority 替换。
-- **MostRequestedPriority :** 在  ClusterAutoscalerProvider 中，替换  LeastRequestedPriority，给使用多资源的节点，更高的优先级。计算公式为：(cpu(10 * sum(requested) / capacity) + memory(10 * sum(requested) / capacity)) / 2
-
+- **MostRequestedPriority :** 在  ClusterAutoscalerProvider 中，替换  LeastRequestedPriority，给使用多资源的节点，更高的优先级。计算公式为：(cpu(10 \* sum(requested) / capacity) + memory(10 \* sum(requested) / capacity)) / 2

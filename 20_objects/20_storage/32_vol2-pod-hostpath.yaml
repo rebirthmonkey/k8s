@@ -6,7 +6,7 @@ spec:
   volumes:
   - name: vol-data
     hostPath:
-      path: /Users/ruan/workspace/k8s/20_objects/20_storage
+      path: /tmp
       type: Directory
 
   restartPolicy: Never

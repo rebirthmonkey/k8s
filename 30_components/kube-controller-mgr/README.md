@@ -9,8 +9,6 @@
 - ServiceAccount Controller
 - Token Controller
 
-
-
 ## 代码机制
 
 - client-go：负责与apiserver通信，获取API对象的状态信息

@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
         - name: ct-service4-health-check
-          image: python:2.7
+          image: python:3.8
           imagePullPolicy: IfNotPresent
-          command: ['/bin/bash','-c','echo \$(hostname) > index.html && sleep 60 && python -m SimpleHTTPServer 8080']
+          command: ['/bin/bash','-c','echo $(hostname) > index.html && sleep 60 && python -m http.server 8080']
           ports:
             - containerPort: 8080
           readinessProbe:
