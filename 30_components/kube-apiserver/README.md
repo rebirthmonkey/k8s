@@ -20,7 +20,7 @@ GET /api/v1/watch/pods
 
 K8s 的 informer 模块封装了 list-watch API，用户只需要指定资源，编写事件处理函数 AddFunc、UpdateFunc 和DeleteFunc 等。如下图所示，informer 首先通过 list API 罗列资源，然后调用 watch  API 监听资源的变更事件，并将结果放入到一个 FIFO 队列，队列的另一头有协程从中取出事件，并调用对应的注册函数处理事件。Informer 还维护了一个只读的 Map Store 缓存，主要为了提升查询的效率，降低 Aiserver 的负载。
 
-![理解K8S的设计精髓之list-watch](figures/f9eab21464ec485aab29fc83bbcddea9)
+![理解K8S的设计精髓之list-watch](figures/f9eab21464ec485aab29fc83bbcddea9.png)
 
 ### Watch 的实现
 
