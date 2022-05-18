@@ -2,6 +2,8 @@
 
 ## create pods
 
+> Under the `wordpress` directory
+
 - create 1 mysql deployment
   - `kubectl apply -f mysql-deployment.yml`
 - create 1 mysql service
@@ -15,7 +17,11 @@
   - `echo "$(minikube ip) ingress.minikube" | sudo tee -a /etc/hosts`: add host name to /etc/hosts
   - `kubectl apply -f wordpress-ingress.yml`: create ingress
 
+> 前提是minikube，kubeadm搭建的集群不一定work
+
 ## create 2 persistent volumes
+
+> Under the `wordpress` directory
 
   - `/var/lib/mysql` for MySQL deployment
     - `kubectl apply -f mysql-pv.yml`

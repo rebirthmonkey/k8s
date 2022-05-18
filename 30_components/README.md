@@ -26,30 +26,30 @@ Node：
 
 ![image-20200806173918737](figures/image-20200806173918737.png)
 
-
 ## kube-apiserver
+
 - [kube-apiserver](kube-apiserver/README.md)
 
-
 ## kube-controller-manager
+
 - [kube-controller-manager](kube-controller-mgr/README.md)
 
-
 ## kube-scheduler
+
 - [kube-scheduler](kube-scheduler/README.md)
 
-
 ## kubelet
+
 - [kubelet](kubelet/README.md)
 
-
 ## kube-proxy
+
 - [kube-proxy](kube-proxy/README.md)
 
-
 ## kube-dns
+
 - [kube-dns](kube-dns/README.md)
 
-
 ## Security
-- [Security](component/aaa/README.md)
+
+- [Security](aaa/README.md)

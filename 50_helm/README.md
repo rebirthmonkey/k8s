@@ -73,6 +73,7 @@ rm -rf darwin-amd64
 ```shell
 helm version
 helm repo add stable https://mirror.azure.cn/kubernetes/charts/
+helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo add incubator https://mirror.azure.cn/kubernetes/charts-incubator/
 helm repo update
 helm search repo stable
@@ -80,38 +81,57 @@ helm install my-redis stable/redis
 helm uninstall my-redis
 ```
 
+> `bitnami`维护了许多流行的开源镜像
+
+> `stable`有[https://mirror.azure.cn/kubernetes/charts/](https://mirror.azure.cn/kubernetes/charts/)镜像
+
 ## Existing Charts
 
-### MySQL
+> 注意，许多Charts（例如MySQL等数据库）需要设置PVC/StorageClass，请具体问题具体分析，使用`helm inspect all <chart>`查看要求
+
+> 许多本地客户端接入命令会导致kubectl端口转发任务作为后台任务创建。可以用`jobs`命令列出用户的后台任务，然后使用`kill %[n]`等命令结束（`n`为后台任务的编号）
+
+### MariaDB
+
+MariaDB 是和MySQL兼容的关系型数据库
+
+MariaDB 需要持久化
 
 ```shell
-helm install my-mysql stable/mysql
-helm uninstall my-mysql
+helm install my-mariadb bitnami/mariadb
+helm uninstall my-mariadb
 ```
 
 - 获取密码
 
 ```shell
-MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default my-mysql -o jsonpath="{.data.mysql-root-password}" | base64 --decode; echo)
-echo $MYSQL_ROOT_PASSWORD
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default my-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+echo $MARIADB_ROOT_PASSWORD
 ```
 
 - 起一个 pod 作为客户端
 
-```shell
-kubectl run --rm -i --tty ubuntu --image=ubuntu:16.04 --restart=Never -- bash -il
-[pod] $ apt-get update && apt-get install mysql-client -y
-[pod] $ mysql -h my-mysql -p
-```
+  ```shell
+  kubectl run my-mariadb-client --rm --tty -i --restart='Never' --image  docker.io/bitnami/mariadb:10.6.7-debian-10-r70 --namespace default --command -- bash
+  [pod] $ mysql -h my-mariadb -uroot -p
+  Enter Password: 
+  ```
+
+  > 输入上一步获得的密码
 
 - 本地客户端接入: Docker-for-Desktop 可用
 
-```shell
-MYSQL_HOST=127.0.0.1
-MYSQL_PORT=3306
-kubectl port-forward --namespace default svc/my-mysql 3307:3306 & 
-mysql -h 127.0.0.1 -P3307 -u root -p${MYSQL_ROOT_PASSWORD} # port 3306 already in use
-```
+  ```shell
+  MARIADB_PORT=3307
+  kubectl port-forward --namespace default svc/my-mymariadb ${MARIADB_PORT}:3306
+  ```
+
+  在另一终端
+
+  ```shell
+  MARIADB_PORT=3307
+  mysql -h 127.0.0.1 -P${MARIADB_PORT} -u root -p${MYSQL_ROOT_PASSWORD} # let's assume port 3306 already in use
+  ```
 
 - mysql 验证
 
@@ -120,6 +140,10 @@ show databases;
 ```
 
 ### MongoDB
+
+MongoDB 是一个基于分布式文件存储的数据库
+
+MongoDB 需要持久化
 
 ```shell
 helm install my-mongodb stable/mongodb
@@ -148,13 +172,17 @@ kubectl port-forward --namespace default svc/my-mongodb 27017:27017 & mongo --ho
 
 ```shell
 show dbs
-use runoob # 创建db
+use ice6413p # 创建db
 db # 显示当前db
-db.runoob.insert({"name":"菜鸟教程"}) # 插入一条数据
+db.ice6413p.insert({"name":"ice6413p"}) # 插入一条数据
 db.dropDatabase() # 删除db
 ```
 
 ### Redis
+
+Redis 是一个key-value 存储系统，是跨平台的非关系型数据库。
+
+Redis 需要持久化
 
 ```shell
 helm install my-redis stable/redis
@@ -189,7 +217,11 @@ set aaa "xxx"
 get aaa
 ```
 
-### Rabbitmq
+### RabbitMQ
+
+RabbitMQ是实现了高级消息队列协议（AMQP）的开源消息代理软件
+
+RabbitMQ需要持久化
 
 ```shell
 helm install my-rabbitmq stable/rabbitmq
@@ -205,21 +237,26 @@ export RABBITMQ_COOKIE=$(kubectl get secret --namespace default my-rabbitmq -o j
 ```
 
 - 本地客户端接入: Docker-for-Desktop 可用
+
   - AMQP
 
-```shell
-kubectl port-forward --namespace default svc/my-rabbitmq 5672:5672 &
-echo "URL: amqp://127.0.0.1:5672/"
-```
+    ```shell
+    kubectl port-forward --namespace default svc/my-rabbitmq 5672:5672 &
+    echo "URL: amqp://127.0.0.1:5672/"
+    ```
 
   - Management Interface
 
-```shell
-kubectl port-forward --namespace default svc/my-rabbitmq 15672:15672 &
-echo "URL: http://127.0.0.1:15672/"
-```
+    ```shell
+    kubectl port-forward --namespace default svc/my-rabbitmq 15672:15672 &
+    echo "URL: http://127.0.0.1:15672/"
+    ```
 
 ### Kafka(?)
+
+Kafka 是一种分布式的，基于发布 / 订阅的消息系统。主要设计目标如下： 以时间复杂度为 O(1) 的方式提供消息持久化能力
+
+Kafka 不需要持久化
 
 ```shell
 helm install my-kafka stable/kafka-manager
@@ -235,6 +272,10 @@ kubectl port-forward $POD_NAME 8080:9000
 
 ### ElasticSearch(?)
 
+Elasticsearch 是一个分布式、RESTful 风格的搜索和数据分析引擎，能够解决不断涌现出的各种用例
+
+Elasticsearch 需要持久化
+
 ```shell
 helm install my-es stable/elasticsearch
 helm uninstall my-es
@@ -243,7 +284,7 @@ helm uninstall my-es
 - 本地客户端接入: Docker-for-Desktop 可用
 
 ```shell
-export POD_NAME=$(kubectl get pods --namespace default -l "app=elasticsearch,component=client,release=my-es" -o jsonpath="{.items[0].metadata.name}")
+export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/instance=my-es,app.kubernetes.io/component=master" -o jsonpath="{.items[0].metadata.name}")
 kubectl port-forward --namespace default $POD_NAME 9200:9200 &
 echo "URL: http://127.0.0.1:9200/"
 ```
@@ -252,20 +293,26 @@ echo "URL: http://127.0.0.1:9200/"
 
 ### Release
 
-- `helm create hello-svc`: create a Helm package
+以下是一些常见的命令
+
+- `helm create hello-svc`: 创建 Helm package
 - `helm install --dry-run --debug ./`：验证模板和配置
 - `helm install ./`：启动本chart的release
-- `helm list`：list release
-- `helm delete wishful-squid`
+- `helm list`：列出 release
+- `helm delete [release]` 删除特定的 release
 
 ### Custom Charts
 
-- `docker pull nginx:1.15`
-- `helm create hello-helm`
-- `helm install ./hello-helm`
-- `export POD_NAME=$(kubectl get pods --namespace default -l "app=hello-helm,release=fallacious-snail" -o jsonpath="{.items[0].metadata.name}")`
-- `kubectl port-forward $POD_NAME 8080:80`
-- `echo "Visit http://127.0.0.1:8080 to use your application"`
+```shell
+[node] $ docker pull nginx:1.15
+helm create hello-helm
+helm install hello-nginx ./hello-helm
+export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=hello-helm" -o jsonpath="{.items[0].metadata.name}")
+kubectl port-forward $POD_NAME 8080:80
+helm uninstall hello-nginx
+```
+
+Visit `http://127.0.0.1:8080` to use your application
 
 ## Reference
 

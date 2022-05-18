@@ -14,4 +14,3 @@
 - [k8s Architecture & Components](30_components/README.md)
 - [Helm Chart](50_helm/README.md)
 - [Lab](90_lab/README.md)
-

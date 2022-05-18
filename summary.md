@@ -26,4 +26,4 @@
 
 ## Tools
 
-- [Helm](01_installation/helm/README.md)
+- [Install Helm](https://helm.sh/zh/docs/)
