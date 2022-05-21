@@ -9,7 +9,7 @@ spec:
     - name: liveness
       image: registry.hub.docker.com/davidliyutong/liveness:latest
       imagePullPolicy: IfNotPresent
-      command: ['sh', '-c', '/server']
+      command: ['/server']
       livenessProbe:
         httpGet:
           path: /healthz
