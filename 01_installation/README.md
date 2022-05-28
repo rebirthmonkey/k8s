@@ -2,9 +2,13 @@
 
 ## Installation
 
-### Docker-for-Desktop
+### Docker-Desktop
 
-有时候k8s一直处于starting的状态，是因为很多k8s需要的进行无法pull下来，具体方法可以手动按照特定版本的Docker-for-Desktop，然后按照[教程](https://github.com/gotok8s/k8s-docker-desktop-for-mac)通过脚本手动下载所有镜像。
+有时候 k8s 一直处于 starting 的状态，是因为很多 k8 s需要的进行无法 pull 下来，具体方法可以手动按照特定版本的Docker-for-Desktop，然后按照[教程](https://github.com/gotok8s/k8s-docker-desktop-for-mac)通过脚本手动下载所有镜像。
+
+#### Connect from Docker to Host
+
+在 Docker-Desktop 的一个容器中，可以通过 URL `host.docker.internal` 连接到 host 的 network 上。
 
 ### Docker
 

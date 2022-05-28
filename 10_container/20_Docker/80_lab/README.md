@@ -13,6 +13,7 @@
 
 ## Lab
 
+- [go-app](02_go-helloworld/README.md)
 - [wordpress](10_wordpress/README.md)
 - [python-server](12_python-server/README.md)
 - [frontend & backend](14_frontbackend/README.md)
