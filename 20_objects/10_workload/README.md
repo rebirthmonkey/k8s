@@ -35,6 +35,8 @@ kubectl label nodes NODE_ID zone- # unlabel zone
 
 > NODE_ID要替换成NODE的实际ID
 > `zone=xxx`是一个标记node属于哪一个区的手段，对应`12_replicaset2-node-selector.yaml`中的`spec.template.spec.nodeSelector`
+> 更换标签后，pod并不会主动被驱逐
+> NodeSelector未来会被弃用
 
 ## Deployment
 

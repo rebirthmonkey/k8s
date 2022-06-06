@@ -119,7 +119,7 @@ Create a new empty dir for the volume
 
 ```shell
 kubectl apply -f 30_vol1-pod-emptydir.yaml
-kubectl exec vol1-emptydir -- ls /data
+kubectl exec vol1-pod-emptydir -- ls /data
 ```
 
 #### hostPath
