@@ -66,7 +66,7 @@ lrwxrwxrwx 1 root root 0 Aug 13 14:05 cgroup -> cgroup:[4026531835]lrwxrwxrwx 1 
 - `docker rm CT_ID`: remove a *stopped* container
     - `docker rm -f CT_ID`: force mode, remove a *running* container
     - `docker rm -f $(docker container ps -aq)`: remove all the containers
-  
+
 ### pause/unpause
 
 - `docker pause CT_ID`
@@ -125,3 +125,9 @@ on the host
 ```shell
 curl localhost:8888 # access the web page
 ```
+
+## Bug
+
+### 外部无法连接容器
+
+容器内必须绑定 0.0.0.0，而非 127.0.0.1。
