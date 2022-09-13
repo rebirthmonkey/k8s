@@ -2,7 +2,7 @@
 
 ## Introduction
 
-helm 是 k8s 的一个项目，相当于 Linux 的 yum。在 yum 仓库中，yum 不光要解决包之间的依赖关系，还要提供具体的程序包。helm 仓库里面只有配置清单文件而没有镜像，镜像还是由镜像仓库来提供，如 hub.docker.com、私有仓库。helm 提供了一个应用所需要的所有清单文件。例如一个 nginx，需要一个 deployment 清单文件、一个 service 清单文件、一个 hpa 的清单文件，把这 3 个文件打包到一起就是一个应用的程序包，称之为 Chart。Chart 是一个 helm 程序包，其实质只是一个模板，可以对这个模板进行赋值（value），形成自定义的清单文件。Helm 把 K8s 资源打包到一个 chart 中，而 chart 被保存到 chart 仓库，通过 chart 仓库可用来存储和分享 chart。
+Helm 是 k8s 的一个项目，相当于 Linux 的 yum。在 yum 仓库中，yum 不光要解决包之间的依赖关系，还要提供具体的程序包。helm 仓库里面只有配置清单文件而没有镜像，镜像还是由镜像仓库来提供，如 hub.docker.com、私有仓库。Helm 提供了一个应用所需要的所有清单文件。例如一个 nginx，需要一个 deployment 清单文件、一个 service 清单文件、一个 hpa 的清单文件，把这 3 个文件打包到一起就是一个应用的程序包，称之为 Chart。Chart 是一个 helm 程序包，其实质只是一个模板，可以对这个模板进行赋值（value），形成自定义的清单文件。Helm 把 K8s 资源打包到一个 chart 中，而 chart 被保存到 chart 仓库，通过 chart 仓库可用来存储和分享 chart。
 
 ### 原理
 
