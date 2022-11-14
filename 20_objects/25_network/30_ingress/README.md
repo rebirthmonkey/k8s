@@ -4,11 +4,13 @@
 
 通常情况下，service 和 pod 的 IP 仅可在 k8s 集群内部访问，k8s 集群外部的请求需要转发到 service 在 Node 上暴露的 NodePort 上，然后再由 kube-proxy 将其转发给相关的 Pod。而 Ingress 就是为进入 k8s 集群的请求提供路由规则的集合。Ingress 其实就是从 K8s 集群外部访问集群的一个入口，将外部的请求转发到集群内不同的 Service 上，其实就相当于 nginx、haproxy 等 LB，所以 ingress 其实是为了代理不同后端 Service 而设置的路由服务。Ingress 是 L7 的路由，而 Service 是 L4 的负载均衡，Ingress Controller 基于 Ingress 规则将 client 的 request 直接转发到 service 对应的后端 endpoint（即 pod）上，这样会跳过 kube-proxy 的转发功能。
 
-Ingress Controller 可以理解为一个监听器，通过不断地监听 kube-apiserver，实时的感知后端 Service、Pod 的变化，当得到这些信息变化后，Ingress Controller 再结合 Ingress  的配置，更新反向代理负载均衡器，达到服务发现的作用。其实这点和服务发现工具 consul、 consul-template 非常类似。Ingres Controller 以 DaemonSet 的形式创建，在每个 node 上以 Pod hostPort 的方式启动一个 Nginx 服务。它保持 watch Apiserver 的 /ingress 接口以更新 Ingress 资源，以满足 Ingress 的请求。现在可以供大家使用的 Ingress Controller 有很多，比如 traefik、nginx-controller、Kubernetes Ingress Controller for Kong、HAProxy Ingress controller，当然你也可以自己实现一个  Ingress Controller，现在普遍用得较多的是 traefik 和 nginx-controller。
+Ingress Controller 可以理解为一个监听器，通过不断地监听 kube-apiserver，实时的感知后端 Service、Pod 的变化，当得到这些信息变化后，Ingress Controller 再结合 Ingress  的配置，更新反向代理负载均衡器，达到服务发现的作用。其实这点和服务发现工具 consul、 consul-template 非常类似。Ingres Controller 以 DaemonSet 的形式创建，在每个 node 上以 Pod hostPort 的方式启动一个 Nginx 服务。它保持 watch Apiserver 的 /ingress 接口以更新 Ingress 资源，以满足 Ingress 的请求。现在可以供大家使用的 Ingress Controller 有很多，比如 traefik、nginx-controller、Kubernetes Ingress Controller for Kong、HAProxy Ingress controller，当然你也可以自己实现一个 Ingress Controller，现在普遍用得较多的是 traefik 和 nginx-controller。
 
 <img src="figures/image-20221114193950769.png" alt="image-20221114193950769" style="zoom:50%;" />
 
 ### Installation
+
+#### Helm
 
 ```shell
 helm repo add stable https://mirror.azure.cn/kubernetes/charts/
@@ -18,7 +20,7 @@ kubectl --namespace kube-system get services -o wide -w nginx-ingress-controller
 
 > 可以通过[Helm-Install](https://helm.sh/zh/docs/intro/install/)获取安装Helm的方法。
 
-### Another Installation
+#### YAML
 
 if the upper one doesn't work
 
@@ -30,7 +32,7 @@ kubectl apply -f ingress-nginx.yaml
 
 > 注意替换无法下载的镜像
 
-### Installation (adapted to GFW)
+#### adapted to GFW
 
 通过Helm安装，但不完全通过Helm安装
 
@@ -121,8 +123,7 @@ kubectl create ns ingress-nginx
 最后，手动安装ingrex-nginx
 
 ```shell
-helm install --namespace ingress-nginx ingress-nginx ./ingress-nginx \
-             -f ./ingress-nginx/values.yaml
+helm install --namespace ingress-nginx ingress-nginx ./ingress-nginx          -f ./ingress-nginx/values.yaml
 ```
 
 所有Controller都READY标志着部署成功
@@ -138,7 +139,7 @@ ingress-nginx-defaultbackend-8657d58dfc-hvx7s   1/1     Running   0          22m
 > `helm uninstall ingress-nginx` 可以反安装
 > `kubectl delete namespace ingress-nginx` 也可以，这是因为所有的ingress-nginx组件都安装在`ingress-nginx`命名空间下
 
-### Installation on Minikube
+#### Minikube
 
 ```shell
 minikube addons enable ingress
@@ -156,8 +157,6 @@ kubectl get pods -n ingress-nginx
 kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-qf6gw -- cat /etc/nginx/nginx.conf
 kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-qf6gw -- tail /var/log/nginx/error.log
 ```
-
-### Hello-world
 
 ## Ingress策略
 
