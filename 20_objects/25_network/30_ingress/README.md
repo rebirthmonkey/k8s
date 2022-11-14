@@ -6,7 +6,7 @@
 
 Ingress Controller 可以理解为一个监听器，通过不断地监听 kube-apiserver，实时的感知后端 Service、Pod 的变化，当得到这些信息变化后，Ingress Controller 再结合 Ingress  的配置，更新反向代理负载均衡器，达到服务发现的作用。其实这点和服务发现工具 consul、 consul-template 非常类似。Ingres Controller 以 DaemonSet 的形式创建，在每个 node 上以 Pod hostPort 的方式启动一个 Nginx 服务。它保持 watch Apiserver 的 /ingress 接口以更新 Ingress 资源，以满足 Ingress 的请求。现在可以供大家使用的 Ingress Controller 有很多，比如 traefik、nginx-controller、Kubernetes Ingress Controller for Kong、HAProxy Ingress controller，当然你也可以自己实现一个  Ingress Controller，现在普遍用得较多的是 traefik 和 nginx-controller。
 
-<img src="figures/wecom-temp-9204c69f289f503689a97a26ead4acc7.png" alt="wecom-temp-9204c69f289f503689a97a26ead4acc7" style="zoom:50%;" />
+<img src="figures/image-20221114193950769.png" alt="image-20221114193950769" style="zoom:50%;" />
 
 ### Installation
 
