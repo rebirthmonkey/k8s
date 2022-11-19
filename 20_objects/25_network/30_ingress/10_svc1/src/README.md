@@ -11,7 +11,9 @@ curl http://localhost:8080 # in another terminal
 
 ```shell
 go mod init main
+go mod tidy
 docker build -t wukongsun/nginx-ingress-demo-svc1:0.1 .
+docker push wukongsun/nginx-ingress-demo-svc1:0.1
 ```
 
 ## Docker Test

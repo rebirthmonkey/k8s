@@ -13,9 +13,11 @@ Ingress Controller 可以理解为一个监听器，通过不断地监听 kube-a
 #### Helm
 
 ```shell
-helm repo add stable https://mirror.azure.cn/kubernetes/charts/
-helm install nginx-ingress-controller --namespace kube-system stable/nginx-ingress # ingress controller安装在localhost的80和443端口
-kubectl --namespace kube-system get services -o wide -w nginx-ingress-controller-controller
+helm repo add nginx-stable https://helm.nginx.com/stable
+helm repo update
+helm install -n kube-system nginx-ingress-controller nginx-stable/nginx-ingress
+kubectl -n kube-systet get pods
+kubectl -n kube-system get services 
 ```
 
 > 可以通过[Helm-Install](https://helm.sh/zh/docs/intro/install/)获取安装Helm的方法。
@@ -151,13 +153,6 @@ minikube addons enable ingress
 kubectl get pods -n ingress-nginx
 ```
 
-### Troubleshooting
-
-```shell
-kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-qf6gw -- cat /etc/nginx/nginx.conf
-kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-qf6gw -- tail /var/log/nginx/error.log
-```
-
 ## Ingress策略
 
 一个 Ingress 对象可以有多个host，每个 host 里可以有多个 path 对应多个service。Ingress 策略定义的 path 需要与后端真实 Service 的 path 一致，否则将会转发到一个不存在的 path 上。
@@ -271,6 +266,8 @@ kubectl delete secret secret-tls-svc5
 
 ## Debug
 
+### helm repo error
+
 You may face some problems when using "helm repo add", then  you can try changing the source [helm 修改repo源](https://blog.csdn.net/u014089832/article/details/108593291)
 
 ```shell
@@ -281,6 +278,13 @@ helm search
 ```
 
 > [https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts](https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts) 很久没有更新了。[https://charts.helm.sh/stable](https://charts.helm.sh/stable)是个不错的选择
+
+### Ingress Troubleshooting
+
+```shell
+kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-qf6gw -- cat /etc/nginx/nginx.conf
+kubectl exec -it -n kube-system nginx-ingress-controller-controller-57f69dc9b9-qf6gw -- tail /var/log/nginx/error.log
+```
 
 ## Tips
 

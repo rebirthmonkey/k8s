@@ -64,7 +64,9 @@ curl -k https://localhost:8080 # in another terminal
 
 ```bash
 go mod init main
+go mod tidy
 docker build -t wukongsun/nginx-ingress-demo-svc2:0.1 .
+docker push wukongsun/nginx-ingress-demo-svc2:0.1
 ```
 
 ## Docker Test

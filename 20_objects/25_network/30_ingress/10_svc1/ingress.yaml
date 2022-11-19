@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ct-go-server
-          image: nginx-ingress-demo-svc1:0.1 # Replace with your image
+          image: wukongsun/nginx-ingress-demo-svc1:0.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
