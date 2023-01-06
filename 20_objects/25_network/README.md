@@ -25,7 +25,7 @@ k8s的网络模型特点如下：
 
 #### hostPort
 
-hostPort 相当于`docker run -p 30890:80`，为容器在主机上做个 NAT 映射，不用创建 svc，因此端口只在容器运行的vm上监听。但是其缺点是无法负载多 pod。
+hostPort 相当于`docker run -p 30890:80`，为容器在主机上做个 NAT 映射，不用创建 svc，因此端口只在容器运行的 vm 上监听。但是其缺点是无法负载多 pod。
 
 ```shell
 kubectl apply -f 10_pod1-host-pod.yaml
@@ -34,7 +34,7 @@ curl localhost:30890 # Docker-Desktop doesn't work
 
 #### hostNetwork
 
-hostNetwork相当于 `docker run --net=host`，与主机共享 network 网络栈，不用创建svc，因此端口只在容器运行的 vm 上监听。
+hostNetwork 相当于 `docker run --net=host`，与主机共享 network 网络栈，不用创建svc，因此端口只在容器运行的 vm 上监听。
 
 ```shell
 kubectl apply -f 12_pod2-host-network.yaml
@@ -53,7 +53,7 @@ curl 127.0.0.1:30888 # Docker-Desktop works!
 
 #### externalIPS(tmp)
 
-通过svc来实现pod间的负载，但要求只监听某台指定node上，而非像nodeport那样监听所有节点。
+通过 svc 来实现pod间的负载，但要求只监听某台指定 node 上，而非像 nodeport 那样监听所有节点。
 
 ```shell
 kubectl apply -f 22_service2-external-ip.yaml
