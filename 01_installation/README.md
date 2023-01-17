@@ -4,7 +4,7 @@
 
 ### Docker-Desktop
 
-有时候 k8s 一直处于 starting 的状态，是因为很多 k8 s需要的进行无法 pull 下来，具体方法可以手动按照特定版本的Docker-for-Desktop，然后按照[教程](https://github.com/gotok8s/k8s-docker-desktop-for-mac)通过脚本手动下载所有镜像。
+有时候 k8s 一直处于 starting 的状态，是因为很多 k8s 需要的进行无法 pull 下来，具体方法可以手动按照特定版本的 Docker-for-Desktop，然后按照[教程](https://github.com/gotok8s/k8s-docker-desktop-for-mac)通过脚本手动下载所有镜像。
 
 #### Connect from Docker to Host
 
@@ -86,6 +86,58 @@ ExecStart=/usr/bin/dockerd
 # -H fd://
 ```
 
+### kind-in-kind
+
+kind（Kubernetes In Docker）将 k8s 所需要的所有组件全部部署在了一个 Docker 容器中，是一套开箱即用的 k8s 环境搭建方案，可以快速搭建 k8s 测试平台。它将每个容器模拟成一个 k8s 节点，可以轻松地在单节点上部署“多节点”集群，而且还可以部署和管理多个版本集群。在搭建个人学习平台时，如果要搭建一个多控多计算的集群，个人电脑很难有这么高的资源配置，使用 kind 来部署集群就很有必要了【2】。
+
+#### Install
+
+```bash
+brew install kind
+```
+
+#### Manipulate
+
+```bash
+kind create cluster --name xxx
+kubectl cluster-info --context kind-xxx
+kubectl get pods --context kind-xxx
+```
+
+节点信息
+
+```bash
+Kubernetes control plane is running at https://127.0.0.1:60004
+CoreDNS is running at https://127.0.0.1:60004/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+```
+
+- 多节点集群
+
+```yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+```
+
+```bash
+kind create cluster --config config.yaml
+```
+
+
+
+#### 添加镜像
+
+kind 不能直接使用主机上的镜像，需要导入到 kind 的节点（容器中）才能使用。
+
+```bash
+kind load docker-image nginx:1.9.0 --name xxx
+```
+
+
+
 ### kubectl
 
 kubectl是用于控制K8S集群的工具。kubectl并不承担运行集群的工作。集群的运行是有K8S套件中的容器/虚拟机完成的
@@ -161,3 +213,4 @@ kubectl config use-context $CONTEXT_ID # switch to another K8S context
 ## Ref
 
 1. [Official documentation for installation](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+1. [kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
