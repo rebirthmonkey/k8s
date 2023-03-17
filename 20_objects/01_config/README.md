@@ -17,6 +17,17 @@ $ kubectl config current-context
 $ kubectl config use-context cluster2
 ```
 
+#### Merge 2 kube config file
+
+```shell
+# Make a copy of your existing config 
+$ cp ~/.kube/config ~/.kube/config.bak # Merge the two config files together into a new config file 
+$ KUBECONFIG=~/.kube/config:/path/to/new/config kubectl config view --flatten > /tmp/config # Replace your old config with the new merged config 
+$ mv /tmp/config ~/.kube/config # (optional) Delete the backup once you confirm everything worked ok 
+```
+
+
+
 ### Lab
 
 创建一个空目录，用于存放config-demo，即我们意图构造的**虚假的**配置文件
